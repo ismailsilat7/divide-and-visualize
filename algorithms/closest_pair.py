@@ -90,6 +90,10 @@ def closest_pair(points, record_steps=False):
             b = a + 1
             while b < len(strip) and (strip[b][1] - strip[a][1]) ** 2 < best:
                 dd = dist_sq(strip[a], strip[b])
+                if record_steps:
+                    steps.append({"type": "check", "lo": lo, "hi": hi,
+                                  "mid_x": mid_x, "pair": (strip[a], strip[b]),
+                                  "dist": math.sqrt(dd)})
                 if dd < best:
                     best, bp, bq = dd, strip[a], strip[b]
                 b += 1

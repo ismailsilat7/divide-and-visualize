@@ -17,11 +17,11 @@ def pow10(k):
     return 10 ** k
 
 
-def karatsuba(x, y, n, steps, depth):
+def karatsuba(x, y, n, steps, depth, threshold=THRESHOLD):
     """x and y have at most n digits each. steps is a list or None."""
     if x == 0 or y == 0:
         return 0
-    if n <= THRESHOLD:                  # base case: ordinary multiplication
+    if n <= threshold:                  # base case: ordinary multiplication
         result = x * y
         if steps is not None:
             steps.append({"type": "base", "depth": depth, "x": x, "y": y,
@@ -37,9 +37,9 @@ def karatsuba(x, y, n, steps, depth):
         steps.append({"type": "split", "depth": depth, "x": x, "y": y, "m": m,
                       "a": a, "b": b, "c": c, "d": d})
 
-    ac = karatsuba(a, c, hi, steps, depth + 1)
-    bd = karatsuba(b, d, m, steps, depth + 1)
-    z = karatsuba(a + b, c + d, hi + 1, steps, depth + 1)   # (a+b)(c+d)
+    ac = karatsuba(a, c, hi, steps, depth + 1, threshold)
+    bd = karatsuba(b, d, m, steps, depth + 1, threshold)
+    z = karatsuba(a + b, c + d, hi + 1, steps, depth + 1, threshold)   # (a+b)(c+d)
     mid = z - ac - bd                   # equals ad + bc
     result = ac * pow10(2 * m) + mid * p + bd               # shifts by powers of 10
 
@@ -49,9 +49,9 @@ def karatsuba(x, y, n, steps, depth):
     return result
 
 
-def multiply(x, y, record_steps=False):
+def multiply(x, y, record_steps=False, threshold=THRESHOLD):
     """x, y: non-negative ints. Returns (product, steps)."""
     steps = [] if record_steps else None
     n = max(len(str(x)), len(str(y)))
-    product = karatsuba(x, y, n, steps, 0)
+    product = karatsuba(x, y, n, steps, 0, threshold)
     return product, (steps or [])
