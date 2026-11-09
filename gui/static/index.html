@@ -1,60 +1,1227 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Divide & Visualize</title>
-<style>
-:root{color-scheme:dark;--bg:#1f2022;--panel:#2a2b2d;--line:#3a3b3e;--text:#e8e8e8;--muted:#9a9a9a;--coral:#e8896a;--amber:#a8692f;--green:#4aa876;--blue:#3a7ca5}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 72% -20%,#303336 0,transparent 42%),var(--bg);font:14px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);min-height:100vh}.app{max-width:1440px;margin:auto;padding:28px;display:grid;grid-template-columns:260px minmax(0,1fr);gap:22px}.panel,.card{background:color-mix(in srgb,var(--panel) 96%,transparent);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 38px #0002}.sidebar{padding:20px;height:calc(100vh - 56px);min-height:600px;position:sticky;top:28px;display:flex;flex-direction:column}.brand{font-size:18px;font-weight:720;letter-spacing:-.4px;display:flex;gap:10px;align-items:center}.brandmark{width:29px;height:29px;background:linear-gradient(145deg,var(--coral),#b65f56);border-radius:9px;display:grid;place-items:center;font-weight:800;color:#201e1d}.sub{color:var(--muted);font-size:12px;margin:6px 0 23px}.group-title{width:100%;font:inherit;font-size:10px;text-transform:uppercase;letter-spacing:1.3px;color:#929292;margin:18px 0 8px;padding:0 8px;border:0;background:none;text-align:left;display:flex;justify-content:space-between;align-items:center;cursor:pointer}.group-title .chevron{font-size:14px;transition:transform .18s}.group-title[aria-expanded="true"] .chevron{transform:rotate(180deg)}[hidden]{display:none!important}.file-list{display:grid;gap:4px}.file{width:100%;border:0;border-radius:9px;background:transparent;color:#ccc;padding:9px 10px;text-align:left;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font:inherit}.file:hover{background:#ffffff0a}.file.selected{background:#e8896a1c;color:#ffb49d;box-shadow:inset 2px 0 var(--coral)}.file small{color:#858585;font-size:11px}.file.selected small{color:#d98d75}.side-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:15px;color:#858585;font-size:11px}.content{min-width:0}.topline{display:flex;justify-content:space-between;align-items:center;margin:0 2px 17px}.eyebrow{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#9a9a9a}.heading{font-size:21px;font-weight:650;letter-spacing:-.5px;margin-top:2px}.badge{border:1px solid #4a4c4e;background:#26282a;border-radius:20px;padding:6px 11px;color:#bcbcbc;font-size:11px}.card{padding:24px}.statusrow{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.status{font-size:20px;font-weight:630;letter-spacing:-.3px;margin:0}.statusdesc{color:var(--muted);margin-top:4px;font-size:12px}.duration{color:#aaa;font-variant-numeric:tabular-nums;font-size:12px;padding-top:4px;white-space:nowrap}.stage{margin-top:22px;height:380px;border:1px solid #3c3e40;background:linear-gradient(160deg,#252729,#222426);border-radius:12px;position:relative;overflow:hidden}.stage.result-stage{height:auto;min-height:380px;overflow:visible}.stage.tree-stage{overflow-x:auto;overflow-y:hidden;display:flex;align-items:center}.stage svg{width:100%;height:100%;display:block}.stage.tree-stage svg{width:auto;height:auto;max-width:none;flex:0 0 auto}.stage-placeholder{position:absolute;inset:0;display:grid;place-items:center;color:#717579;font-size:13px}.zoombar{display:none;align-items:center;justify-content:flex-end;gap:8px;margin-top:9px;color:#aaa;font-size:11px}.zoombar.active{display:flex}.zoombar input{width:150px;accent-color:var(--coral)}.zoombtn{width:27px;height:27px;padding:0;border:1px solid #45474a;border-radius:7px;background:#333537;color:#ddd;font-size:16px;cursor:pointer}.zoom-readout{min-width:40px;text-align:center;font-variant-numeric:tabular-nums}.legend{display:flex;gap:20px;align-items:center;padding:13px 3px 2px;color:#aaa;font-size:11px}.legend span{display:inline-flex;align-items:center;gap:7px}.dot{width:8px;height:8px;border-radius:50%}.dot.current{background:var(--coral)}.dot.frontier{background:var(--amber)}.dot.visited{background:var(--green)}.edgekey{width:15px;border-top:2px solid var(--green)}.timeline{display:flex;gap:13px;align-items:center;margin-top:13px}.timeline input{flex:1;accent-color:var(--coral)}.percent,.stepcount{font-size:11px;color:#aaa;min-width:50px;text-align:right;font-variant-numeric:tabular-nums}.controls{display:flex;align-items:center;gap:8px;margin-top:16px}.btn{border:1px solid #45474a;border-radius:9px;background:#333537;color:#ddd;font:inherit;font-size:12px;padding:9px 14px;cursor:pointer;transition:.15s}.btn:hover{background:#3b3d40;border-color:#5c5e61}.btn.primary{background:var(--blue);border-color:#478bb4;color:white}.btn.primary:hover{background:#478bb4}.spacer{flex:1}.speed{color:#aaa;font-size:11px;display:flex;align-items:center;gap:9px}.speed input{width:100px;accent-color:var(--coral)}.threshold{border-top:1px solid #3b3d40;margin-top:16px;padding-top:12px;display:none}.threshold.active{display:block}.threshold label{display:flex;justify-content:space-between;color:#aaa;font-size:11px}.threshold input{width:100%;accent-color:var(--coral);margin-top:8px}.static-visual{border:1px solid #3b3d40;background:#252729;border-radius:11px;margin:12px 0;padding:12px 14px}.static-visual-head{display:flex;justify-content:space-between;align-items:center;color:#aeb2b4;font-size:11px;margin-bottom:8px}.static-visual svg{width:100%;height:220px;display:block}.static-visual .node-title{fill:#e6e8e8;font-size:13px;font-weight:600}.static-visual .node-sub{fill:#a5aaad;font-size:10px}.static-visual .node-box{fill:#303234;stroke:#55595b;stroke-width:1.5}.static-visual .node-main{stroke:#e8896a}.static-visual .node-result{stroke:#4aa876}.static-visual .node-edge{stroke:#6b7072;stroke-width:1.6;fill:none}.result-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:17px}.metric{border:1px solid #3b3d40;background:#252729;border-radius:11px;padding:15px;min-width:0}.metric label{display:block;color:#85898c;font-size:10px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}.metric strong{font-size:14px;word-break:break-word;font-weight:570}.metric.wide{grid-column:1/-1}.metric .mono{font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:#c8cecb;word-break:break-all}.loading{display:inline-flex;align-items:center;gap:9px;color:#b8b8b8}.spinner{width:13px;height:13px;border:2px solid #555;border-top-color:var(--coral);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.error{color:#f09b85}.welcome{height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#8e9295}.welcome b{display:block;color:#d9dcdd;font-size:16px;margin-bottom:5px}.hint{font-size:11px;color:#777}.tree-label{font-size:10px;fill:#cfd1d2}.tree-node{stroke-width:1.5}.axis-label{fill:#74787b;font-size:10px}.svg-grid{stroke:#ffffff0b;stroke-width:1}
-@media(max-width:900px){.app{grid-template-columns:210px minmax(0,1fr);padding:16px;gap:14px}.sidebar{top:16px;height:calc(100vh - 32px);padding:15px}.card{padding:17px}.stage{height:340px}}@media(max-width:650px){.app{display:block;padding:12px}.sidebar{position:relative;top:0;height:auto;min-height:0;margin-bottom:12px}.file-list{grid-template-columns:repeat(5,1fr)}.group-title{margin-top:13px}.side-foot{display:none}.stage{height:290px}.controls{flex-wrap:wrap}.spacer{display:none}.speed{margin-left:auto}.result-grid{grid-template-columns:1fr 1fr}.topline{margin-bottom:12px}}
-</style></head><body><div class="app">
-<aside class="sidebar panel"><div class="brand"><span class="brandmark">÷</span> Divide & Visualize</div><div class="sub">Design & Analysis of Algorithms</div><button class="group-title" type="button" data-group="closest" aria-expanded="true">Closest pair · 10 datasets <span class="chevron">⌄</span></button><div class="file-list" id="closestFiles"></div><button class="group-title" type="button" data-group="multiply" aria-expanded="false">Integer multiplication · 10 datasets <span class="chevron">⌄</span></button><div class="file-list" id="multiplyFiles" hidden></div><div class="side-foot">CS2009 · Fall 2026<br>FAST-NUCES Karachi</div></aside>
-<main class="content"><div class="topline"><div><div class="eyebrow">Algorithm laboratory</div><div class="heading" id="title">Choose a dataset</div></div><span class="badge" id="sizeBadge">READY</span></div><section class="card"><div class="statusrow"><div><h1 class="status" id="status">Pick an input file to begin</h1><div class="statusdesc" id="description">Step through divide and conquer, one frame at a time.</div></div><div class="duration" id="duration"></div></div><div class="stage" id="stage"><div class="welcome"><div><b>Explore the algorithm</b>Choose a dataset from the left to load its result and visualization.<div class="hint" style="margin-top:8px">Small inputs animate step by step · large inputs show a benchmark result</div></div></div></div><div class="zoombar" id="zoomBar"><span>Tree zoom</span><button class="zoombtn" id="zoomOut" aria-label="Zoom out">−</button><input id="zoomRange" type="range" min="0.5" max="150" step="0.5" value="60"><button class="zoombtn" id="zoomIn" aria-label="Zoom in">+</button><span class="zoom-readout" id="zoomReadout">60%</span><button class="btn" id="zoomFit">Fit</button></div><div class="legend" id="legend"><span><i class="dot current"></i>Current</span><span><i class="dot frontier"></i>Frontier</span><span><i class="dot visited"></i>Visited</span><span><i class="edgekey"></i>Result edge</span></div><div class="timeline"><input id="scrubber" type="range" min="0" max="0" value="0" disabled><span class="percent" id="percent">0%</span></div><div class="controls"><button class="btn primary" id="replay">▶ Play</button><button class="btn" id="prev">← Prev</button><button class="btn" id="next">Next →</button><button class="btn" id="reset">↺ Reset</button><span class="spacer"></span><label class="speed">Speed <input id="speed" type="range" min="1" max="10" value="5"><span id="speedValue">5×</span></label><span class="stepcount" id="stepCount">0 / 0</span></div><div class="threshold" id="thresholdBox"><label><span>Karatsuba base-case threshold</span><strong id="thresholdValue">32 digits</strong></label><input id="threshold" type="range" min="4" max="64" step="4" value="32"></div></section></main></div>
-<script>
-const $=s=>document.querySelector(s);let runToken=0,files=[],current=null,data=null,index=0,timer=null,treeNodes=[],treeEvents=[],treeZoom=.6,treeWidth=900;
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-async function init(){try{const r=await fetch('/api/files');({files}=await r.json());document.querySelectorAll('[data-group]').forEach(button=>button.onclick=()=>{const selected=button.dataset.group;document.querySelectorAll('[data-group]').forEach(other=>{const open=other.dataset.group===selected&&other.getAttribute('aria-expanded')!=='true';other.setAttribute('aria-expanded',String(open));document.querySelector(`#${other.dataset.group}Files`).hidden=!open})});for(const item of files){const el=document.createElement('button');el.className='file';el.dataset.id=item.id;el.innerHTML=`<span>${item.id}</span><small>${esc(item.size_label)}</small>`;el.onclick=()=>selectFile(item.id);(item.kind==='closest'?$('#closestFiles'):$('#multiplyFiles')).append(el)}}catch(e){$('#status').textContent='Unable to reach the local server';$('#description').textContent='Start the app with python3 gui/app.py.'}}
-async function selectFile(id,keepThreshold=false){pause();const token=++runToken;current=files.find(f=>f.id===id);if(!keepThreshold){const t=current.animatable?32:64;$('#threshold').value=t;$('#thresholdValue').textContent=t+' digits'}document.querySelectorAll('.file').forEach(x=>x.classList.toggle('selected',x.dataset.id===id));$('#title').textContent=current.kind==='closest'?'Closest pair of points':'Karatsuba integer multiplication';$('#sizeBadge').textContent=current.size_label.toUpperCase();$('#duration').textContent='';$('#status').innerHTML='<span class="loading"><i class="spinner"></i>Loading '+id+'…</span>';$('#description').textContent=current.animatable?'The algorithm is running locally.':'Large input: this can take up to 30 seconds.';$('#stage').classList.remove('tree-stage','result-stage');$('#stage').innerHTML='<div class="stage-placeholder"><span class="loading"><i class="spinner"></i>Computing result…</span></div>';$('#legend').style.display='none';$('#scrubber').disabled=true;$('#thresholdBox').classList.toggle('active',current.kind==='multiply');$('#zoomBar').classList.remove('active');
-try{const threshold=Number($('#threshold').value);const r=await fetch(`/api/run?file=${encodeURIComponent(id)}&threshold=${threshold}`);const body=await r.json();if(token!==runToken)return;if(!r.ok)throw Error(body.error||'Run failed');data=body;index=0;if(body.animated&&body.kind==='closest')body.steps.push({type:'final',pair:body.result.pair,dist:body.result.distance});$('#duration').textContent=`${body.elapsed.toFixed(3)} s`;$('#status').textContent=body.animated?'Ready to explore':'Run complete';$('#description').textContent=body.animated?`${body.steps.length.toLocaleString()} recorded frames · use the controls to explore`:'Large input · final result and elapsed time';$('#legend').style.display=body.animated?'flex':'none';if(body.animated){if(body.kind==='multiply')$('#zoomBar').classList.add('active');$('#scrubber').disabled=false;$('#scrubber').max=Math.max(0,body.steps.length-1);if(body.kind==='closest')renderClosest(0);else{prepareTree();fitTreeToPanel();renderTree(0)}}else renderResult();syncControls()}catch(e){if(token!==runToken)return;$('#status').textContent='Could not run this dataset';$('#description').innerHTML=`<span class="error">${esc(e.message)}</span>`;$('#stage').innerHTML='<div class="stage-placeholder error">Check that the dataset exists and try again.</div>'}}
-function renderResult() {
-  $('#zoomBar').classList.remove('active');
-  $('#stage').classList.remove('tree-stage');
-  $('#stage').classList.add('result-stage');
-  const r = data.result;
-  const inputDigits = r.input_digits ?? current.size;
-  let visual = '', cards = '';
-  if (data.kind === 'closest') {
-    const hasCloud = Array.isArray(data.overview_points) && data.overview_points.length > 2;
-    const [[x1, y1], [x2, y2]] = r.pair;
-    const sample = hasCloud ? data.overview_points : r.pair;
-    const xs = sample.map(p => p[0]), ys = sample.map(p => p[1]);
-    const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
-    const W = 800, H = 220, pad = 28;
-    const X = x => pad + (x - minX) / (maxX - minX || 1) * (W - 2 * pad);
-    const Y = y => H - pad - (y - minY) / (maxY - minY || 1) * (H - 2 * pad);
-    let marks = '';
-    for (let k = 0; k < 4; k++) {
-      const gy = pad + (H - 2 * pad) * k / 3;
-      marks += `<line x1="${pad}" y1="${gy}" x2="${W-pad}" y2="${gy}" stroke="#ffffff10"/>`;
-    }
-    for (const p of sample) marks += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="2.1" fill="#8b9093" opacity=".58"/>`;
-    marks += `<line x1="${X(x1)}" y1="${Y(y1)}" x2="${X(x2)}" y2="${Y(y2)}" stroke="#4aa876" stroke-width="3"/><circle cx="${X(x1)}" cy="${Y(y1)}" r="5" fill="#e8896a" stroke="#202224" stroke-width="2"/><circle cx="${X(x2)}" cy="${Y(y2)}" r="5" fill="#e8896a" stroke="#202224" stroke-width="2"/>`;
-    visual = `<div class="static-visual"><div class="static-visual-head"><span>${hasCloud ? 'Closest-pair overview' : 'Closest-pair detail'}</span><span>${hasCloud ? `Sample of ${current.size.toLocaleString()} points · closest edge highlighted` : 'Restart the server to load the full point-cloud sample'}</span></div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Sampled point cloud with closest pair highlighted">${marks}<text class="axis-label" x="${pad}" y="${H-5}">x coordinate</text><text class="axis-label" x="8" y="${pad}">y</text></svg></div>`;
-    cards = `<div class="result-grid"><div class="metric"><label>Closest distance</label><strong>${Number(r.distance).toPrecision(10)}</strong></div><div class="metric"><label>Dataset</label><strong>${esc(current.size_label)}</strong></div><div class="metric"><label>Runtime</label><strong>${data.elapsed.toFixed(3)} s</strong></div><div class="metric wide"><label>Closest pair</label><strong class="mono">(${x1}, ${y1}) &nbsp;↔&nbsp; (${x2}, ${y2})</strong></div><div class="metric wide"><label>Verification</label><strong>${esc(data.verification)}</strong></div></div>`;
-  } else {
-    visual = `<div class="static-visual"><div class="static-visual-head"><span>Karatsuba overview</span><span>${inputDigits.toLocaleString()}-digit operands · threshold ${data.threshold}</span></div><svg viewBox="0 0 800 220" role="img" aria-label="Karatsuba split, three recursive products, and recombination"><path class="node-edge" d="M400 58 V86 M400 86 H145 V113 M400 86 V113 M400 86 H655 V113 M145 157 V177 H400 M400 157 V177 M655 157 V177 H400"/><rect class="node-box node-main" x="310" y="18" width="180" height="42" rx="10"/><text class="node-title" text-anchor="middle" x="400" y="36">Split x and y</text><text class="node-sub" text-anchor="middle" x="400" y="51">x = a·10ᵐ + b · y = c·10ᵐ + d</text><rect class="node-box" x="70" y="112" width="150" height="45" rx="9"/><text class="node-title" text-anchor="middle" x="145" y="132">ac</text><text class="node-sub" text-anchor="middle" x="145" y="147">high × high</text><rect class="node-box" x="325" y="112" width="150" height="45" rx="9"/><text class="node-title" text-anchor="middle" x="400" y="132">bd</text><text class="node-sub" text-anchor="middle" x="400" y="147">low × low</text><rect class="node-box" x="580" y="112" width="150" height="45" rx="9"/><text class="node-title" text-anchor="middle" x="655" y="132">(a+b)(c+d)</text><text class="node-sub" text-anchor="middle" x="655" y="147">third recursive product</text><rect class="node-box node-result" x="150" y="178" width="500" height="32" rx="9"/><text class="node-title" text-anchor="middle" x="400" y="199">ac·10²ᵐ + ((a+b)(c+d) − ac − bd)·10ᵐ + bd</text></svg></div>`;
-    cards = `<div class="result-grid"><div class="metric"><label>Product digits</label><strong>${r.digits.toLocaleString()}</strong></div><div class="metric"><label>Runtime</label><strong>${data.elapsed.toFixed(3)} s</strong></div><div class="metric"><label>Base threshold</label><strong>${data.threshold} digits</strong></div><div class="metric wide"><label>Product · first 32 digits</label><strong class="mono">${esc(r.prefix)}</strong></div><div class="metric wide"><label>Product · last 32 digits</label><strong class="mono">${esc(r.suffix)}</strong></div><div class="metric wide"><label>Verification</label><strong>${esc(data.verification)}</strong></div></div>`;
-  }
-  $('#stage').innerHTML = `${visual}${cards}`;
-  $('#scrubber').disabled = true;
-  $('#percent').textContent = '—';
-  $('#stepCount').textContent = 'Result';
-}
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Divide & Visualize</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #1f2022;
+        --panel: #2a2b2d;
+        --line: #3a3b3e;
+        --text: #e8e8e8;
+        --muted: #9a9a9a;
+        --coral: #e8896a;
+        --amber: #a8692f;
+        --green: #4aa876;
+        --blue: #3a7ca5;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background:
+          radial-gradient(ellipse at 72% -20%, #303336 0, transparent 42%),
+          var(--bg);
+        font:
+          14px/1.5 ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+        color: var(--text);
+        min-height: 100vh;
+      }
+      .app {
+        max-width: 1440px;
+        margin: auto;
+        padding: 28px;
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+        gap: 22px;
+      }
+      .panel,
+      .card {
+        background: color-mix(in srgb, var(--panel) 96%, transparent);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: 0 12px 38px #0002;
+      }
+      .sidebar {
+        padding: 20px;
+        height: calc(100vh - 56px);
+        min-height: 600px;
+        position: sticky;
+        top: 28px;
+        display: flex;
+        flex-direction: column;
+      }
+      .brand {
+        font-size: 18px;
+        font-weight: 720;
+        letter-spacing: -0.4px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .brandmark {
+        width: 29px;
+        height: 29px;
+        background: linear-gradient(145deg, var(--coral), #b65f56);
+        border-radius: 9px;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        color: #201e1d;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 12px;
+        margin: 6px 0 23px;
+      }
+      .group-title {
+        width: 100%;
+        font: inherit;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1.3px;
+        color: #929292;
+        margin: 18px 0 8px;
+        padding: 0 8px;
+        border: 0;
+        background: none;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+      }
+      .group-title .chevron {
+        font-size: 14px;
+        transition: transform 0.18s;
+      }
+      .group-title[aria-expanded="true"] .chevron {
+        transform: rotate(180deg);
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .file-list {
+        display: grid;
+        gap: 4px;
+      }
+      .file {
+        width: 100%;
+        border: 0;
+        border-radius: 9px;
+        background: transparent;
+        color: #ccc;
+        padding: 9px 10px;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        font: inherit;
+      }
+      .file:hover {
+        background: #ffffff0a;
+      }
+      .file.selected {
+        background: #e8896a1c;
+        color: #ffb49d;
+        box-shadow: inset 2px 0 var(--coral);
+      }
+      .file small {
+        color: #858585;
+        font-size: 11px;
+      }
+      .file.selected small {
+        color: #d98d75;
+      }
+      .side-foot {
+        margin-top: auto;
+        border-top: 1px solid var(--line);
+        padding-top: 15px;
+        color: #858585;
+        font-size: 11px;
+      }
+      .content {
+        min-width: 0;
+      }
+      .topline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 2px 17px;
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        color: #9a9a9a;
+      }
+      .heading {
+        font-size: 21px;
+        font-weight: 650;
+        letter-spacing: -0.5px;
+        margin-top: 2px;
+      }
+      .badge {
+        border: 1px solid #4a4c4e;
+        background: #26282a;
+        border-radius: 20px;
+        padding: 6px 11px;
+        color: #bcbcbc;
+        font-size: 11px;
+      }
+      .card {
+        padding: 24px;
+      }
+      .statusrow {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 15px;
+      }
+      .status {
+        font-size: 20px;
+        font-weight: 630;
+        letter-spacing: -0.3px;
+        margin: 0;
+      }
+      .statusdesc {
+        color: var(--muted);
+        margin-top: 4px;
+        font-size: 12px;
+      }
+      .duration {
+        color: #aaa;
+        font-variant-numeric: tabular-nums;
+        font-size: 12px;
+        padding-top: 4px;
+        white-space: nowrap;
+      }
+      .stage {
+        margin-top: 22px;
+        height: 380px;
+        border: 1px solid #3c3e40;
+        background: linear-gradient(160deg, #252729, #222426);
+        border-radius: 12px;
+        position: relative;
+        overflow: hidden;
+      }
+      .stage.result-stage {
+        height: auto;
+        min-height: 380px;
+        overflow: visible;
+      }
+      .stage.tree-stage {
+        overflow-x: auto;
+        overflow-y: hidden;
+        display: flex;
+        align-items: center;
+      }
+      .stage svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .stage.tree-stage svg {
+        width: auto;
+        height: auto;
+        max-width: none;
+        flex: 0 0 auto;
+      }
+      .stage-placeholder {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: #717579;
+        font-size: 13px;
+      }
+      .zoombar {
+        display: none;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 9px;
+        color: #aaa;
+        font-size: 11px;
+      }
+      .zoombar.active {
+        display: flex;
+      }
+      .zoombar input {
+        width: 150px;
+        accent-color: var(--coral);
+      }
+      .zoombtn {
+        width: 27px;
+        height: 27px;
+        padding: 0;
+        border: 1px solid #45474a;
+        border-radius: 7px;
+        background: #333537;
+        color: #ddd;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .zoom-readout {
+        min-width: 40px;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+      }
+      .legend {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        padding: 13px 3px 2px;
+        color: #aaa;
+        font-size: 11px;
+      }
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      .dot.current {
+        background: var(--coral);
+      }
+      .dot.frontier {
+        background: var(--amber);
+      }
+      .dot.visited {
+        background: var(--green);
+      }
+      .edgekey {
+        width: 15px;
+        border-top: 2px solid var(--green);
+      }
+      .timeline {
+        display: flex;
+        gap: 13px;
+        align-items: center;
+        margin-top: 13px;
+      }
+      .timeline input {
+        flex: 1;
+        accent-color: var(--coral);
+      }
+      .percent,
+      .stepcount {
+        font-size: 11px;
+        color: #aaa;
+        min-width: 50px;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .btn {
+        border: 1px solid #45474a;
+        border-radius: 9px;
+        background: #333537;
+        color: #ddd;
+        font: inherit;
+        font-size: 12px;
+        padding: 9px 14px;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .btn:hover {
+        background: #3b3d40;
+        border-color: #5c5e61;
+      }
+      .btn.primary {
+        background: var(--blue);
+        border-color: #478bb4;
+        color: white;
+      }
+      .btn.primary:hover {
+        background: #478bb4;
+      }
+      .spacer {
+        flex: 1;
+      }
+      .speed {
+        color: #aaa;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .speed input {
+        width: 100px;
+        accent-color: var(--coral);
+      }
+      .threshold {
+        border-top: 1px solid #3b3d40;
+        margin-top: 16px;
+        padding-top: 12px;
+        display: none;
+      }
+      .threshold.active {
+        display: block;
+      }
+      .threshold label {
+        display: flex;
+        justify-content: space-between;
+        color: #aaa;
+        font-size: 11px;
+      }
+      .threshold input {
+        width: 100%;
+        accent-color: var(--coral);
+        margin-top: 8px;
+      }
+      .static-visual {
+        border: 1px solid #3b3d40;
+        background: #252729;
+        border-radius: 11px;
+        margin: 12px 0;
+        padding: 12px 14px;
+      }
+      .static-visual-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #aeb2b4;
+        font-size: 11px;
+        margin-bottom: 8px;
+      }
+      .static-visual svg {
+        width: 100%;
+        height: 220px;
+        display: block;
+      }
+      .static-visual .node-title {
+        fill: #e6e8e8;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .static-visual .node-sub {
+        fill: #a5aaad;
+        font-size: 10px;
+      }
+      .static-visual .node-box {
+        fill: #303234;
+        stroke: #55595b;
+        stroke-width: 1.5;
+      }
+      .static-visual .node-main {
+        stroke: #e8896a;
+      }
+      .static-visual .node-result {
+        stroke: #4aa876;
+      }
+      .static-visual .node-edge {
+        stroke: #6b7072;
+        stroke-width: 1.6;
+        fill: none;
+      }
+      .result-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 17px;
+      }
+      .metric {
+        border: 1px solid #3b3d40;
+        background: #252729;
+        border-radius: 11px;
+        padding: 15px;
+        min-width: 0;
+      }
+      .metric label {
+        display: block;
+        color: #85898c;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 6px;
+      }
+      .metric strong {
+        font-size: 14px;
+        word-break: break-word;
+        font-weight: 570;
+      }
+      .metric.wide {
+        grid-column: 1/-1;
+      }
+      .metric .mono {
+        font:
+          12px/1.6 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        color: #c8cecb;
+        word-break: break-all;
+      }
+      .loading {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        color: #b8b8b8;
+      }
+      .spinner {
+        width: 13px;
+        height: 13px;
+        border: 2px solid #555;
+        border-top-color: var(--coral);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .error {
+        color: #f09b85;
+      }
+      .welcome {
+        height: 100%;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 20px;
+        color: #8e9295;
+      }
+      .welcome b {
+        display: block;
+        color: #d9dcdd;
+        font-size: 16px;
+        margin-bottom: 5px;
+      }
+      .hint {
+        font-size: 11px;
+        color: #777;
+      }
+      .tree-label {
+        font-size: 10px;
+        fill: #cfd1d2;
+      }
+      .tree-node {
+        stroke-width: 1.5;
+      }
+      .axis-label {
+        fill: #74787b;
+        font-size: 10px;
+      }
+      .svg-grid {
+        stroke: #ffffff0b;
+        stroke-width: 1;
+      }
+      @media (max-width: 900px) {
+        .app {
+          grid-template-columns: 210px minmax(0, 1fr);
+          padding: 16px;
+          gap: 14px;
+        }
+        .sidebar {
+          top: 16px;
+          height: calc(100vh - 32px);
+          padding: 15px;
+        }
+        .card {
+          padding: 17px;
+        }
+        .stage {
+          height: 340px;
+        }
+      }
+      @media (max-width: 650px) {
+        .app {
+          display: block;
+          padding: 12px;
+        }
+        .sidebar {
+          position: relative;
+          top: 0;
+          height: auto;
+          min-height: 0;
+          margin-bottom: 12px;
+        }
+        .file-list {
+          grid-template-columns: repeat(5, 1fr);
+        }
+        .group-title {
+          margin-top: 13px;
+        }
+        .side-foot {
+          display: none;
+        }
+        .stage {
+          height: 290px;
+        }
+        .controls {
+          flex-wrap: wrap;
+        }
+        .spacer {
+          display: none;
+        }
+        .speed {
+          margin-left: auto;
+        }
+        .result-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .topline {
+          margin-bottom: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar panel">
+        <div class="brand">
+          <span class="brandmark">÷</span> Divide & Visualize
+        </div>
+        <div class="sub">Design & Analysis of Algorithms</div>
+        <button
+          class="group-title"
+          type="button"
+          data-group="closest"
+          aria-expanded="true"
+        >
+          Closest pair · 10 datasets <span class="chevron">⌄</span>
+        </button>
+        <div class="file-list" id="closestFiles"></div>
+        <button
+          class="group-title"
+          type="button"
+          data-group="multiply"
+          aria-expanded="false"
+        >
+          Integer multiplication · 10 datasets <span class="chevron">⌄</span>
+        </button>
+        <div class="file-list" id="multiplyFiles" hidden></div>
+        <div class="side-foot">CS2009 · Fall 2026<br />FAST-NUCES Karachi</div>
+      </aside>
+      <main class="content">
+        <div class="topline">
+          <div>
+            <div class="eyebrow">Algorithm laboratory</div>
+            <div class="heading" id="title">Choose a dataset</div>
+          </div>
+          <span class="badge" id="sizeBadge">READY</span>
+        </div>
+        <section class="card">
+          <div class="statusrow">
+            <div>
+              <h1 class="status" id="status">Pick an input file to begin</h1>
+              <div class="statusdesc" id="description">
+                Step through divide and conquer, one frame at a time.
+              </div>
+            </div>
+            <div class="duration" id="duration"></div>
+          </div>
+          <div class="stage" id="stage">
+            <div class="welcome">
+              <div>
+                <b>Explore the algorithm</b>Choose a dataset from the left to
+                load its result and visualization.
+                <div class="hint" style="margin-top: 8px">
+                  Small inputs animate step by step · large inputs show a
+                  benchmark result
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="zoombar" id="zoomBar">
+            <span>Tree zoom</span
+            ><button class="zoombtn" id="zoomOut" aria-label="Zoom out">
+              −</button
+            ><input
+              id="zoomRange"
+              type="range"
+              min="0.5"
+              max="150"
+              step="0.5"
+              value="60"
+            /><button class="zoombtn" id="zoomIn" aria-label="Zoom in">+</button
+            ><span class="zoom-readout" id="zoomReadout">60%</span
+            ><button class="btn" id="zoomFit">Fit</button>
+          </div>
+          <div class="legend" id="legend">
+            <span><i class="dot current"></i>Current</span
+            ><span><i class="dot frontier"></i>Frontier</span
+            ><span><i class="dot visited"></i>Visited</span
+            ><span><i class="edgekey"></i>Result edge</span>
+          </div>
+          <div class="timeline">
+            <input
+              id="scrubber"
+              type="range"
+              min="0"
+              max="0"
+              value="0"
+              disabled
+            /><span class="percent" id="percent">0%</span>
+          </div>
+          <div class="controls">
+            <button class="btn primary" id="replay">▶ Play</button
+            ><button class="btn" id="prev">← Prev</button
+            ><button class="btn" id="next">Next →</button
+            ><button class="btn" id="reset">↺ Reset</button
+            ><span class="spacer"></span
+            ><label class="speed"
+              >Speed
+              <input id="speed" type="range" min="1" max="10" value="5" /><span
+                id="speedValue"
+                >5×</span
+              ></label
+            ><span class="stepcount" id="stepCount">0 / 0</span>
+          </div>
+          <div class="threshold" id="thresholdBox">
+            <label
+              ><span>Karatsuba base-case threshold</span
+              ><strong id="thresholdValue">32 digits</strong></label
+            ><input
+              id="threshold"
+              type="range"
+              min="4"
+              max="64"
+              step="4"
+              value="32"
+            />
+          </div>
+        </section>
+      </main>
+    </div>
+    <script>
+      const $ = (s) => document.querySelector(s);
+      let runToken = 0,
+        files = [],
+        current = null,
+        data = null,
+        index = 0,
+        timer = null,
+        treeNodes = [],
+        treeEvents = [],
+        treeZoom = 0.6,
+        treeWidth = 900;
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      async function init() {
+        try {
+          const r = await fetch("/api/files");
+          ({ files } = await r.json());
+          document.querySelectorAll("[data-group]").forEach(
+            (button) =>
+              (button.onclick = () => {
+                const selected = button.dataset.group;
+                document.querySelectorAll("[data-group]").forEach((other) => {
+                  const open =
+                    other.dataset.group === selected &&
+                    other.getAttribute("aria-expanded") !== "true";
+                  other.setAttribute("aria-expanded", String(open));
+                  document.querySelector(
+                    `#${other.dataset.group}Files`,
+                  ).hidden = !open;
+                });
+              }),
+          );
+          for (const item of files) {
+            const el = document.createElement("button");
+            el.className = "file";
+            el.dataset.id = item.id;
+            el.innerHTML = `<span>${item.id}</span><small>${esc(item.size_label)}</small>`;
+            el.onclick = () => selectFile(item.id);
+            (item.kind === "closest"
+              ? $("#closestFiles")
+              : $("#multiplyFiles")
+            ).append(el);
+          }
+        } catch (e) {
+          $("#status").textContent = "Unable to reach the local server";
+          $("#description").textContent =
+            "Start the app with python3 gui/app.py.";
+        }
+      }
+      async function selectFile(id, keepThreshold = false) {
+        pause();
+        const token = ++runToken;
+        current = files.find((f) => f.id === id);
+        if (!keepThreshold) {
+          const t = current.animatable ? 32 : 64;
+          $("#threshold").value = t;
+          $("#thresholdValue").textContent = t + " digits";
+        }
+        document
+          .querySelectorAll(".file")
+          .forEach((x) => x.classList.toggle("selected", x.dataset.id === id));
+        $("#title").textContent =
+          current.kind === "closest"
+            ? "Closest pair of points"
+            : "Karatsuba integer multiplication";
+        $("#sizeBadge").textContent = current.size_label.toUpperCase();
+        $("#duration").textContent = "";
+        $("#status").innerHTML =
+          '<span class="loading"><i class="spinner"></i>Loading ' +
+          id +
+          "…</span>";
+        $("#description").textContent = current.animatable
+          ? "The algorithm is running locally."
+          : "Large input: this can take up to 30 seconds.";
+        $("#stage").classList.remove("tree-stage", "result-stage");
+        $("#stage").innerHTML =
+          '<div class="stage-placeholder"><span class="loading"><i class="spinner"></i>Computing result…</span></div>';
+        $("#legend").style.display = "none";
+        $("#scrubber").disabled = true;
+        $("#thresholdBox").classList.toggle(
+          "active",
+          current.kind === "multiply",
+        );
+        $("#zoomBar").classList.remove("active");
+        try {
+          const threshold = Number($("#threshold").value);
+          const r = await fetch(
+            `/api/run?file=${encodeURIComponent(id)}&threshold=${threshold}`,
+          );
+          const body = await r.json();
+          if (token !== runToken) return;
+          if (!r.ok) throw Error(body.error || "Run failed");
+          data = body;
+          index = 0;
+          if (body.animated && body.kind === "closest")
+            body.steps.push({
+              type: "final",
+              pair: body.result.pair,
+              dist: body.result.distance,
+            });
+          $("#duration").textContent = `${body.elapsed.toFixed(3)} s`;
+          $("#status").textContent = body.animated
+            ? "Ready to explore"
+            : "Run complete";
+          $("#description").textContent = body.animated
+            ? `${body.steps.length.toLocaleString()} recorded frames · use the controls to explore`
+            : "Large input · final result and elapsed time";
+          $("#legend").style.display = body.animated ? "flex" : "none";
+          if (body.animated) {
+            if (body.kind === "multiply") $("#zoomBar").classList.add("active");
+            $("#scrubber").disabled = false;
+            $("#scrubber").max = Math.max(0, body.steps.length - 1);
+            if (body.kind === "closest") renderClosest(0);
+            else {
+              prepareTree();
+              fitTreeToPanel();
+              renderTree(0);
+            }
+          } else renderResult();
+          syncControls();
+        } catch (e) {
+          if (token !== runToken) return;
+          $("#status").textContent = "Could not run this dataset";
+          $("#description").innerHTML =
+            `<span class="error">${esc(e.message)}</span>`;
+          $("#stage").innerHTML =
+            '<div class="stage-placeholder error">Check that the dataset exists and try again.</div>';
+        }
+      }
+      function renderResult() {
+        $("#zoomBar").classList.remove("active");
+        $("#stage").classList.remove("tree-stage");
+        $("#stage").classList.add("result-stage");
+        const r = data.result;
+        const inputDigits = r.input_digits ?? current.size;
+        let visual = "",
+          cards = "";
+        if (data.kind === "closest") {
+          const hasCloud =
+            Array.isArray(data.overview_points) &&
+            data.overview_points.length > 2;
+          const [[x1, y1], [x2, y2]] = r.pair;
+          const sample = hasCloud ? data.overview_points : r.pair;
+          const xs = sample.map((p) => p[0]),
+            ys = sample.map((p) => p[1]);
+          const minX = Math.min(...xs),
+            maxX = Math.max(...xs),
+            minY = Math.min(...ys),
+            maxY = Math.max(...ys);
+          const W = 800,
+            H = 220,
+            pad = 28;
+          const X = (x) =>
+            pad + ((x - minX) / (maxX - minX || 1)) * (W - 2 * pad);
+          const Y = (y) =>
+            H - pad - ((y - minY) / (maxY - minY || 1)) * (H - 2 * pad);
+          let marks = "";
+          for (let k = 0; k < 4; k++) {
+            const gy = pad + ((H - 2 * pad) * k) / 3;
+            marks += `<line x1="${pad}" y1="${gy}" x2="${W - pad}" y2="${gy}" stroke="#ffffff10"/>`;
+          }
+          for (const p of sample)
+            marks += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="2.1" fill="#8b9093" opacity=".58"/>`;
+          marks += `<line x1="${X(x1)}" y1="${Y(y1)}" x2="${X(x2)}" y2="${Y(y2)}" stroke="#4aa876" stroke-width="3"/><circle cx="${X(x1)}" cy="${Y(y1)}" r="5" fill="#e8896a" stroke="#202224" stroke-width="2"/><circle cx="${X(x2)}" cy="${Y(y2)}" r="5" fill="#e8896a" stroke="#202224" stroke-width="2"/>`;
+          visual = `<div class="static-visual"><div class="static-visual-head"><span>${hasCloud ? "Closest-pair overview" : "Closest-pair detail"}</span><span>${hasCloud ? `Sample of ${current.size.toLocaleString()} points · closest edge highlighted` : "Restart the server to load the full point-cloud sample"}</span></div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Sampled point cloud with closest pair highlighted">${marks}<text class="axis-label" x="${pad}" y="${H - 5}">x coordinate</text><text class="axis-label" x="8" y="${pad}">y</text></svg></div>`;
+          cards = `<div class="result-grid"><div class="metric"><label>Closest distance</label><strong>${Number(r.distance).toPrecision(10)}</strong></div><div class="metric"><label>Dataset</label><strong>${esc(current.size_label)}</strong></div><div class="metric"><label>Runtime</label><strong>${data.elapsed.toFixed(3)} s</strong></div><div class="metric wide"><label>Closest pair</label><strong class="mono">(${x1}, ${y1}) &nbsp;↔&nbsp; (${x2}, ${y2})</strong></div><div class="metric wide"><label>Verification</label><strong>${esc(data.verification)}</strong></div></div>`;
+        } else {
+          visual = `<div class="static-visual"><div class="static-visual-head"><span>Karatsuba overview</span><span>${inputDigits.toLocaleString()}-digit operands · threshold ${data.threshold}</span></div><svg viewBox="0 0 800 220" role="img" aria-label="Karatsuba split, three recursive products, and recombination"><path class="node-edge" d="M400 58 V86 M400 86 H145 V113 M400 86 V113 M400 86 H655 V113 M145 157 V177 H400 M400 157 V177 M655 157 V177 H400"/><rect class="node-box node-main" x="310" y="18" width="180" height="42" rx="10"/><text class="node-title" text-anchor="middle" x="400" y="36">Split x and y</text><text class="node-sub" text-anchor="middle" x="400" y="51">x = a·10ᵐ + b · y = c·10ᵐ + d</text><rect class="node-box" x="70" y="112" width="150" height="45" rx="9"/><text class="node-title" text-anchor="middle" x="145" y="132">ac</text><text class="node-sub" text-anchor="middle" x="145" y="147">high × high</text><rect class="node-box" x="325" y="112" width="150" height="45" rx="9"/><text class="node-title" text-anchor="middle" x="400" y="132">bd</text><text class="node-sub" text-anchor="middle" x="400" y="147">low × low</text><rect class="node-box" x="580" y="112" width="150" height="45" rx="9"/><text class="node-title" text-anchor="middle" x="655" y="132">(a+b)(c+d)</text><text class="node-sub" text-anchor="middle" x="655" y="147">third recursive product</text><rect class="node-box node-result" x="150" y="178" width="500" height="32" rx="9"/><text class="node-title" text-anchor="middle" x="400" y="199">ac·10²ᵐ + ((a+b)(c+d) − ac − bd)·10ᵐ + bd</text></svg></div>`;
+          cards = `<div class="result-grid"><div class="metric"><label>Product digits</label><strong>${r.digits.toLocaleString()}</strong></div><div class="metric"><label>Runtime</label><strong>${data.elapsed.toFixed(3)} s</strong></div><div class="metric"><label>Base threshold</label><strong>${data.threshold} digits</strong></div><div class="metric wide"><label>Product · first 32 digits</label><strong class="mono">${esc(r.prefix)}</strong></div><div class="metric wide"><label>Product · last 32 digits</label><strong class="mono">${esc(r.suffix)}</strong></div><div class="metric wide"><label>Verification</label><strong>${esc(data.verification)}</strong></div></div>`;
+        }
+        $("#stage").innerHTML = `${visual}${cards}`;
+        $("#scrubber").disabled = true;
+        $("#percent").textContent = "—";
+        $("#stepCount").textContent = "Result";
+      }
 
-function renderClosest(i){if(!data)return;$('#zoomBar').classList.remove('active');$('#stage').classList.remove('tree-stage','result-stage');index=i;const step=data.steps[i]||{};const points=data.points,W=900,H=380,pad=38,xs=points.map(p=>p[0]),ys=points.map(p=>p[1]),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);const X=x=>pad+(x-minX)/(maxX-minX||1)*(W-2*pad),Y=y=>H-pad-(y-minY)/(maxY-minY||1)*(H-2*pad);const active=new Set();if(step.strip)step.strip.forEach(p=>active.add(p.join(',')));if(step.pair)(step.pair||[]).forEach(p=>active.add(p.join(',')));let markup='';for(let k=0;k<=4;k++){const gy=pad+(H-2*pad)*k/4;markup+=`<line class="svg-grid" x1="${pad}" y1="${gy}" x2="${W-pad}" y2="${gy}"/>`}if(step.mid_x!==undefined){const line=X(step.mid_x);markup+=`<line x1="${line}" y1="${pad}" x2="${line}" y2="${H-pad}" stroke="#e8896a" stroke-width="1.5" stroke-dasharray="5 5" opacity=".9"/>`;if(step.dist&&step.type==='combine'){const d=step.dist/(maxX-minX||1)*(W-2*pad);markup+=`<rect x="${line-d}" y="${pad}" width="${2*d}" height="${H-2*pad}" fill="#a8692f" opacity=".13"/>`}}
-const pair=step.pair||((step.type==='combine'&&step.pair)||null);if(pair&&pair[0]&&pair[1])markup+=`<line x1="${X(pair[0][0])}" y1="${Y(pair[0][1])}" x2="${X(pair[1][0])}" y2="${Y(pair[1][1])}" stroke="${step.type==='combine'||i===data.steps.length-1?'#4aa876':'#e8896a'}" stroke-width="3"/>`;
-points.forEach(p=>{const inFrame=!step.lo||true;const col=active.has(p.join(','))?'#e8896a':'#8b9093',op=active.has(p.join(','))?1:.62;markup+=`<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="${active.has(p.join(','))?(step.type==='final'?6:4):2.6}" fill="${col}" opacity="${op}"/>`});
-if(step.type==='final'){const a=step.pair[0],b=step.pair[1];markup+=`<text x="${(X(a[0])+X(b[0]))/2+12}" y="${(Y(a[1])+Y(b[1]))/2-12}" fill="#4aa876" font-size="14" font-weight="600">d = ${Number(step.dist).toPrecision(6)}</text>`}
-$('#stage').innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Closest pair point cloud">${markup}<text class="axis-label" x="${pad}" y="${H-10}">x coordinate</text><text class="axis-label" x="12" y="${pad-10}">y</text></svg>`;let labels={divide:'Divide at the middle x-coordinate',strip:'Build the candidate strip',check:'Compare two candidates',base:'Solve a small group directly',combine:'Combine halves and update the best pair',final:'Closest pair found'};$('#status').textContent=step.type==='check'?'Checking a pair in the strip':(labels[step.type]||'Algorithm complete');$('#description').textContent=`Frame ${i+1}: ${step.type||'final'} · ${current.size_label}`;syncControls()}
-function prepareTree(){treeNodes=[];treeEvents=[];let stack=[],nodeId=0;for(const e of data.steps){if(e.type==='split'){const node={id:nodeId++,depth:e.depth,kind:'split',state:'frontier',label:`${String(e.x).length}d × ${String(e.y).length}d`,children:[],detail:`m = ${e.m}`};if(stack.length)stack[stack.length-1].children.push(node);else treeNodes.push(node);stack.push(node);e.node=node.id}else if(e.type==='base'){const node={id:nodeId++,depth:e.depth,kind:'base',state:'visited',label:`${String(e.x).length}d base`,children:[],detail:`${String(e.result).length}d result`};if(stack.length)stack[stack.length-1].children.push(node);else treeNodes.push(node);e.node=node.id}else if(e.type==='combine'){const node=stack.pop();if(node){node.state='visited';node.detail=`${String(e.result).length}d result`;e.node=node.id}}}treeEvents.push(...data.steps)}
-function fitTreeToPanel(){const countLeaves=nodes=>nodes.reduce((sum,node)=>sum+(node.children.length?countLeaves(node.children):1),0);treeWidth=Math.max(900,countLeaves(treeNodes)*112+90);treeZoom=Math.max(.005,Math.min(1,($('#stage').clientWidth-24)/treeWidth));$('#zoomRange').value=Math.round(treeZoom*100);$('#zoomReadout').textContent=`${Math.round(treeZoom*100)}%`}
-function renderTree(i){index=i;const H=380;function flatten(nodes,depth=0,arr=[]){for(const n of nodes){arr.push({...n,depth});flatten(n.children,depth+1,arr)}return arr}const nodes=flatten(treeNodes),levels=Math.max(1,...nodes.map(n=>n.depth+1)),positions=new Map();let leafCount=0;function place(ns,depth){if(!ns.length)return{first:leafCount,last:leafCount};const spans=[];for(const n of ns){if(n.children.length){spans.push(place(n.children,depth+1))}else{const slot=leafCount++;spans.push({first:slot,last:slot})}}ns.forEach((n,j)=>positions.set(n.id,{first:spans[j].first,last:spans[j].last,depth}));return{first:spans[0].first,last:spans.at(-1).last}}place(treeNodes,0);const W=Math.max(900,leafCount*112+90),slotWidth=(W-90)/Math.max(1,leafCount),yGap=(H-72)/Math.max(1,levels-1);for(const n of nodes){const p=positions.get(n.id);p.x=45+((p.first+p.last+1)/2)*slotWidth;p.y=36+p.depth*yGap;n.state='pending'}let active;for(let k=0;k<=i;k++){const ev=data.steps[k],node=nodes.find(n=>n.id===ev.node);if(!node)continue;if(ev.type==='split'){node.state='frontier';active=node.id}else if(ev.type==='base'){node.state='visited';active=node.id}else if(ev.type==='combine'){node.state='visited';active=node.id}}const e=data.steps[i]||{};let markup='';for(const n of nodes){const p=positions.get(n.id);for(const c of n.children){const q=positions.get(c.id);markup+=`<path d="M ${p.x} ${p.y+18} C ${p.x} ${p.y+34}, ${q.x} ${q.y-34}, ${q.x} ${q.y-18}" fill="none" stroke="#56595b" stroke-width="1.4"/>`}}for(const n of nodes){const p=positions.get(n.id),isActive=n.id===active,col=isActive?'#e8896a':n.state==='visited'?'#4aa876':n.state==='frontier'?'#a8692f':'#55595b',label=n.label.replace(' × ','×');markup+=`<rect class="tree-node" x="${p.x-48}" y="${p.y-18}" width="96" height="36" rx="9" fill="${col}" fill-opacity=".2" stroke="${col}"/><text class="tree-label" text-anchor="middle" x="${p.x}" y="${p.y-1}">${esc(label)}</text><text class="tree-label" text-anchor="middle" x="${p.x}" y="${p.y+12}" opacity=".7">${esc(n.detail||'')}</text>`}const stage=$('#stage'),oldScroll=stage.scrollLeft,wasTree=stage.classList.contains('tree-stage');stage.classList.remove('result-stage');treeWidth=W;stage.classList.add('tree-stage');stage.innerHTML=`<svg width="${W*treeZoom}" height="${H*treeZoom}" style="width:${W*treeZoom}px;height:${H*treeZoom}px" viewBox="0 0 ${W} ${H}" role="img" aria-label="Karatsuba recursion tree">${markup}</svg>`;stage.scrollLeft=wasTree?Math.min(oldScroll,stage.scrollWidth-stage.clientWidth):Math.max(0,(stage.scrollWidth-stage.clientWidth)/2);const labels={split:'Split the operands',base:'Multiply a small pair directly',combine:'Combine the three recursive products'};$('#status').textContent=labels[e.type]||'Karatsuba recursion';$('#description').textContent=`Frame ${i+1}: ${e.type||'final'} · ${current.size_label}`;syncControls()}
-function syncControls(){const total=data?.steps.length||0;$('#scrubber').value=index;$('#percent').textContent=total?`${Math.round(100*index/Math.max(1,total-1))}%`:'0%';$('#stepCount').textContent=total?`${index+1} / ${total}`:'0 / 0'}function go(i){if(!data?.animated)return;i=Math.max(0,Math.min(data.steps.length-1,i));data.kind==='closest'?renderClosest(i):renderTree(i)}function pause(){if(timer){clearInterval(timer);timer=null}$('#replay').textContent='▶ Play'}function toggle(){if(timer){pause();return}if(!data?.animated)return;if(index>=data.steps.length-1)go(0);$('#replay').textContent='❚❚ Pause';timer=setInterval(()=>{if(index>=data.steps.length-1){pause();return}go(index+1)},Math.max(55,550-Number($('#speed').value)*45))}
-$('#replay').onclick=toggle;$('#prev').onclick=()=>{pause();go(index-1)};$('#next').onclick=()=>{pause();go(index+1)};$('#reset').onclick=()=>{pause();go(0)};$('#scrubber').oninput=e=>{pause();go(Number(e.target.value))};$('#speed').oninput=e=>{$('#speedValue').textContent=`${e.target.value}×`;if(timer){pause();toggle()}};$('#threshold').oninput=e=>{$('#thresholdValue').textContent=`${e.target.value} digits`};$('#threshold').onchange=()=>{if(current?.kind==='multiply')selectFile(current.id,true)};function setTreeZoom(value,fit=false){treeZoom=Math.max(.005,Math.min(1.5,value));$('#zoomRange').value=Math.round(treeZoom*100);$('#zoomReadout').textContent=`${Math.round(treeZoom*100)}%`;const svg=$('#stage svg');if(svg&&data?.kind==='multiply'){const stage=$('#stage'),center=stage.scrollLeft+stage.clientWidth/2;svg.setAttribute('width',treeWidth*treeZoom);svg.setAttribute('height',380*treeZoom);svg.style.width=`${treeWidth*treeZoom}px`;svg.style.height=`${380*treeZoom}px`;if(fit)stage.scrollLeft=0;else stage.scrollLeft=Math.max(0,center-(treeWidth*treeZoom)/2)}}$('#zoomRange').oninput=e=>setTreeZoom(Number(e.target.value)/100);$('#zoomOut').onclick=()=>setTreeZoom(treeZoom-.1);$('#zoomIn').onclick=()=>setTreeZoom(treeZoom+.1);$('#zoomFit').onclick=()=>setTreeZoom(Math.max(.005,Math.min(1,($('#stage').clientWidth-24)/treeWidth)),true);init();
-</script></body></html>
+      function renderClosest(i) {
+        if (!data) return;
+        $("#zoomBar").classList.remove("active");
+        $("#stage").classList.remove("tree-stage", "result-stage");
+        index = i;
+        const step = data.steps[i] || {};
+        const points = data.points,
+          W = 900,
+          H = 380,
+          pad = 38,
+          xs = points.map((p) => p[0]),
+          ys = points.map((p) => p[1]),
+          minX = Math.min(...xs),
+          maxX = Math.max(...xs),
+          minY = Math.min(...ys),
+          maxY = Math.max(...ys);
+        const X = (x) =>
+            pad + ((x - minX) / (maxX - minX || 1)) * (W - 2 * pad),
+          Y = (y) =>
+            H - pad - ((y - minY) / (maxY - minY || 1)) * (H - 2 * pad);
+        const active = new Set();
+        if (step.strip) step.strip.forEach((p) => active.add(p.join(",")));
+        if (step.pair)
+          (step.pair || []).forEach((p) => active.add(p.join(",")));
+        let markup = "";
+        for (let k = 0; k <= 4; k++) {
+          const gy = pad + ((H - 2 * pad) * k) / 4;
+          markup += `<line class="svg-grid" x1="${pad}" y1="${gy}" x2="${W - pad}" y2="${gy}"/>`;
+        }
+        if (step.mid_x !== undefined) {
+          const line = X(step.mid_x);
+          markup += `<line x1="${line}" y1="${pad}" x2="${line}" y2="${H - pad}" stroke="#e8896a" stroke-width="1.5" stroke-dasharray="5 5" opacity=".9"/>`;
+          if (step.dist && step.type === "combine") {
+            const d = (step.dist / (maxX - minX || 1)) * (W - 2 * pad);
+            markup += `<rect x="${line - d}" y="${pad}" width="${2 * d}" height="${H - 2 * pad}" fill="#a8692f" opacity=".13"/>`;
+          }
+        }
+        const pair =
+          step.pair || (step.type === "combine" && step.pair) || null;
+        if (pair && pair[0] && pair[1])
+          markup += `<line x1="${X(pair[0][0])}" y1="${Y(pair[0][1])}" x2="${X(pair[1][0])}" y2="${Y(pair[1][1])}" stroke="${step.type === "combine" || i === data.steps.length - 1 ? "#4aa876" : "#e8896a"}" stroke-width="3"/>`;
+        points.forEach((p) => {
+          const inFrame = !step.lo || true;
+          const col = active.has(p.join(",")) ? "#e8896a" : "#8b9093",
+            op = active.has(p.join(",")) ? 1 : 0.62;
+          markup += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="${active.has(p.join(",")) ? (step.type === "final" ? 6 : 4) : 2.6}" fill="${col}" opacity="${op}"/>`;
+        });
+        if (step.type === "final") {
+          const a = step.pair[0],
+            b = step.pair[1];
+          markup += `<text x="${(X(a[0]) + X(b[0])) / 2 + 12}" y="${(Y(a[1]) + Y(b[1])) / 2 - 12}" fill="#4aa876" font-size="14" font-weight="600">d = ${Number(step.dist).toPrecision(6)}</text>`;
+        }
+        $("#stage").innerHTML =
+          `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Closest pair point cloud">${markup}<text class="axis-label" x="${pad}" y="${H - 10}">x coordinate</text><text class="axis-label" x="12" y="${pad - 10}">y</text></svg>`;
+        let labels = {
+          divide: "Divide at the middle x-coordinate",
+          strip: "Build the candidate strip",
+          check: "Compare two candidates",
+          base: "Solve a small group directly",
+          combine: "Combine halves and update the best pair",
+          final: "Closest pair found",
+        };
+        $("#status").textContent =
+          step.type === "check"
+            ? "Checking a pair in the strip"
+            : labels[step.type] || "Algorithm complete";
+        $("#description").textContent =
+          `Frame ${i + 1}: ${step.type || "final"} · ${current.size_label}`;
+        syncControls();
+      }
+      function prepareTree() {
+        treeNodes = [];
+        treeEvents = [];
+        let stack = [],
+          nodeId = 0;
+        for (const e of data.steps) {
+          if (e.type === "split") {
+            const node = {
+              id: nodeId++,
+              depth: e.depth,
+              kind: "split",
+              state: "frontier",
+              label: `${String(e.x).length}d × ${String(e.y).length}d`,
+              children: [],
+              detail: `m = ${e.m}`,
+            };
+            if (stack.length) stack[stack.length - 1].children.push(node);
+            else treeNodes.push(node);
+            stack.push(node);
+            e.node = node.id;
+          } else if (e.type === "base") {
+            const node = {
+              id: nodeId++,
+              depth: e.depth,
+              kind: "base",
+              state: "visited",
+              label: `${String(e.x).length}d base`,
+              children: [],
+              detail: `${String(e.result).length}d result`,
+            };
+            if (stack.length) stack[stack.length - 1].children.push(node);
+            else treeNodes.push(node);
+            e.node = node.id;
+          } else if (e.type === "combine") {
+            const node = stack.pop();
+            if (node) {
+              node.state = "visited";
+              node.detail = `${String(e.result).length}d result`;
+              e.node = node.id;
+            }
+          }
+        }
+        treeEvents.push(...data.steps);
+      }
+      function fitTreeToPanel() {
+        const countLeaves = (nodes) =>
+          nodes.reduce(
+            (sum, node) =>
+              sum + (node.children.length ? countLeaves(node.children) : 1),
+            0,
+          );
+        treeWidth = Math.max(900, countLeaves(treeNodes) * 112 + 90);
+        treeZoom = Math.max(
+          0.005,
+          Math.min(1, ($("#stage").clientWidth - 24) / treeWidth),
+        );
+        $("#zoomRange").value = Math.round(treeZoom * 100);
+        $("#zoomReadout").textContent = `${Math.round(treeZoom * 100)}%`;
+      }
+      function renderTree(i) {
+        index = i;
+        const H = 380;
+        function flatten(nodes, depth = 0, arr = []) {
+          for (const n of nodes) {
+            arr.push({ ...n, depth });
+            flatten(n.children, depth + 1, arr);
+          }
+          return arr;
+        }
+        const nodes = flatten(treeNodes),
+          levels = Math.max(1, ...nodes.map((n) => n.depth + 1)),
+          positions = new Map();
+        let leafCount = 0;
+        function place(ns, depth) {
+          if (!ns.length) return { first: leafCount, last: leafCount };
+          const spans = [];
+          for (const n of ns) {
+            if (n.children.length) {
+              spans.push(place(n.children, depth + 1));
+            } else {
+              const slot = leafCount++;
+              spans.push({ first: slot, last: slot });
+            }
+          }
+          ns.forEach((n, j) =>
+            positions.set(n.id, {
+              first: spans[j].first,
+              last: spans[j].last,
+              depth,
+            }),
+          );
+          return { first: spans[0].first, last: spans.at(-1).last };
+        }
+        place(treeNodes, 0);
+        const W = Math.max(900, leafCount * 112 + 90),
+          slotWidth = (W - 90) / Math.max(1, leafCount),
+          yGap = (H - 72) / Math.max(1, levels - 1);
+        for (const n of nodes) {
+          const p = positions.get(n.id);
+          p.x = 45 + ((p.first + p.last + 1) / 2) * slotWidth;
+          p.y = 36 + p.depth * yGap;
+          n.state = "pending";
+        }
+        let active;
+        for (let k = 0; k <= i; k++) {
+          const ev = data.steps[k],
+            node = nodes.find((n) => n.id === ev.node);
+          if (!node) continue;
+          if (ev.type === "split") {
+            node.state = "frontier";
+            active = node.id;
+          } else if (ev.type === "base") {
+            node.state = "visited";
+            active = node.id;
+          } else if (ev.type === "combine") {
+            node.state = "visited";
+            active = node.id;
+          }
+        }
+        const e = data.steps[i] || {};
+        let markup = "";
+        for (const n of nodes) {
+          const p = positions.get(n.id);
+          for (const c of n.children) {
+            const q = positions.get(c.id);
+            markup += `<path d="M ${p.x} ${p.y + 18} C ${p.x} ${p.y + 34}, ${q.x} ${q.y - 34}, ${q.x} ${q.y - 18}" fill="none" stroke="#56595b" stroke-width="1.4"/>`;
+          }
+        }
+        for (const n of nodes) {
+          const p = positions.get(n.id),
+            isActive = n.id === active,
+            col = isActive
+              ? "#e8896a"
+              : n.state === "visited"
+                ? "#4aa876"
+                : n.state === "frontier"
+                  ? "#a8692f"
+                  : "#55595b",
+            label = n.label.replace(" × ", "×");
+          markup += `<rect class="tree-node" x="${p.x - 48}" y="${p.y - 18}" width="96" height="36" rx="9" fill="${col}" fill-opacity=".2" stroke="${col}"/><text class="tree-label" text-anchor="middle" x="${p.x}" y="${p.y - 1}">${esc(label)}</text><text class="tree-label" text-anchor="middle" x="${p.x}" y="${p.y + 12}" opacity=".7">${esc(n.detail || "")}</text>`;
+        }
+        const stage = $("#stage"),
+          oldScroll = stage.scrollLeft,
+          wasTree = stage.classList.contains("tree-stage");
+        stage.classList.remove("result-stage");
+        treeWidth = W;
+        stage.classList.add("tree-stage");
+        stage.innerHTML = `<svg width="${W * treeZoom}" height="${H * treeZoom}" style="width:${W * treeZoom}px;height:${H * treeZoom}px" viewBox="0 0 ${W} ${H}" role="img" aria-label="Karatsuba recursion tree">${markup}</svg>`;
+        stage.scrollLeft = wasTree
+          ? Math.min(oldScroll, stage.scrollWidth - stage.clientWidth)
+          : Math.max(0, (stage.scrollWidth - stage.clientWidth) / 2);
+        const labels = {
+          split: "Split the operands",
+          base: "Multiply a small pair directly",
+          combine: "Combine the three recursive products",
+        };
+        $("#status").textContent = labels[e.type] || "Karatsuba recursion";
+        $("#description").textContent =
+          `Frame ${i + 1}: ${e.type || "final"} · ${current.size_label}`;
+        syncControls();
+      }
+      function syncControls() {
+        const total = data?.steps.length || 0;
+        $("#scrubber").value = index;
+        $("#percent").textContent = total
+          ? `${Math.round((100 * index) / Math.max(1, total - 1))}%`
+          : "0%";
+        $("#stepCount").textContent = total
+          ? `${index + 1} / ${total}`
+          : "0 / 0";
+      }
+      function go(i) {
+        if (!data?.animated) return;
+        i = Math.max(0, Math.min(data.steps.length - 1, i));
+        data.kind === "closest" ? renderClosest(i) : renderTree(i);
+      }
+      function pause() {
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+        }
+        $("#replay").textContent = "▶ Play";
+      }
+      function toggle() {
+        if (timer) {
+          pause();
+          return;
+        }
+        if (!data?.animated) return;
+        if (index >= data.steps.length - 1) go(0);
+        $("#replay").textContent = "❚❚ Pause";
+        timer = setInterval(
+          () => {
+            if (index >= data.steps.length - 1) {
+              pause();
+              return;
+            }
+            go(index + 1);
+          },
+          Math.max(55, 550 - Number($("#speed").value) * 45),
+        );
+      }
+      $("#replay").onclick = toggle;
+      $("#prev").onclick = () => {
+        pause();
+        go(index - 1);
+      };
+      $("#next").onclick = () => {
+        pause();
+        go(index + 1);
+      };
+      $("#reset").onclick = () => {
+        pause();
+        go(0);
+      };
+      $("#scrubber").oninput = (e) => {
+        pause();
+        go(Number(e.target.value));
+      };
+      $("#speed").oninput = (e) => {
+        $("#speedValue").textContent = `${e.target.value}×`;
+        if (timer) {
+          pause();
+          toggle();
+        }
+      };
+      $("#threshold").oninput = (e) => {
+        $("#thresholdValue").textContent = `${e.target.value} digits`;
+      };
+      $("#threshold").onchange = () => {
+        if (current?.kind === "multiply") selectFile(current.id, true);
+      };
+      function setTreeZoom(value, fit = false) {
+        treeZoom = Math.max(0.005, Math.min(1.5, value));
+        $("#zoomRange").value = Math.round(treeZoom * 100);
+        $("#zoomReadout").textContent = `${Math.round(treeZoom * 100)}%`;
+        const svg = $("#stage svg");
+        if (svg && data?.kind === "multiply") {
+          const stage = $("#stage"),
+            center = stage.scrollLeft + stage.clientWidth / 2;
+          svg.setAttribute("width", treeWidth * treeZoom);
+          svg.setAttribute("height", 380 * treeZoom);
+          svg.style.width = `${treeWidth * treeZoom}px`;
+          svg.style.height = `${380 * treeZoom}px`;
+          if (fit) stage.scrollLeft = 0;
+          else
+            stage.scrollLeft = Math.max(0, center - (treeWidth * treeZoom) / 2);
+        }
+      }
+      $("#zoomRange").oninput = (e) =>
+        setTreeZoom(Number(e.target.value) / 100);
+      $("#zoomOut").onclick = () => setTreeZoom(treeZoom - 0.1);
+      $("#zoomIn").onclick = () => setTreeZoom(treeZoom + 0.1);
+      $("#zoomFit").onclick = () =>
+        setTreeZoom(
+          Math.max(
+            0.005,
+            Math.min(1, ($("#stage").clientWidth - 24) / treeWidth),
+          ),
+          true,
+        );
+      init();
+    </script>
+  </body>
+</html>
