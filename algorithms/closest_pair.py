@@ -1,14 +1,10 @@
-# Closest pair of points in 2D, divide and conquer, O(n log n).
+# Closest pair of points in 2D, divide and conquer, O(n log n)
 
 import math
 from bisect import bisect_left
 
+# returns (distance, point_a, point_b, steps) -- steps is a list of event dicts when record_steps is True, otherwise empty.
 def closest_pair(points, record_steps=False):
-    """
-    points: list of (x, y) tuples.
-    Returns (distance, point_a, point_b, steps).
-    steps is a list of event dicts when record_steps is True, otherwise empty.
-    """
     steps = []
     n = len(points)
     if n < 2:
@@ -20,8 +16,8 @@ def closest_pair(points, record_steps=False):
     def dist_sq(p, q):
         return (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2
 
+    # brute force for 2 or 3 points. Returns (squared distance, p, q)
     def brute(pts):
-        """Brute force for 2 or 3 points. Returns (squared distance, p, q)."""
         best = (float("inf"), None, None)
         for i in range(len(pts)):
             for j in range(i + 1, len(pts)):
@@ -30,11 +26,10 @@ def closest_pair(points, record_steps=False):
                     best = (d, pts[i], pts[j])
         return best
 
+
+    # solve for by_x[lo:hi]. ys is the same points sorted by y
+    # returns (best squared distance, p, q, ys sorted by y)
     def solve(lo, hi, ys):
-        """
-        Solve for by_x[lo:hi]. ys is the same points sorted by y.
-        Returns (best squared distance, p, q, ys sorted by y).
-        """
         if hi - lo <= 3:                                  # base case
             d, p, q = brute(by_x[lo:hi])
             if record_steps:
@@ -48,9 +43,8 @@ def closest_pair(points, record_steps=False):
         if record_steps:
             steps.append({"type": "divide", "lo": lo, "hi": hi, "mid_x": mid_x})
 
-        # Split ys into left and right halves, keeping y order.
-        # Points smaller than the pivot go left. Copies of the pivot fill
-        # whatever quota the left half still needs (copies are identical).
+        # split ys into left and right halves, keeping y order.
+        # points smaller than the pivot go left. Copies of the pivot fill whatever quota the left half still needs
         pivot_copies_left = mid - bisect_left(by_x, pivot, lo, hi)
         ys_left, ys_right = [], []
         for p in ys:
@@ -62,7 +56,7 @@ def closest_pair(points, record_steps=False):
             else:
                 ys_right.append(p)
 
-        # Conquer
+        # conquer
         dl, pl, ql, ys_left = solve(lo, mid, ys_left)
         dr, pr, qr, ys_right = solve(mid, hi, ys_right)
         if dl <= dr:
@@ -70,7 +64,7 @@ def closest_pair(points, record_steps=False):
         else:
             best, bp, bq = dr, pr, qr
 
-        # Merge the two y-sorted halves (like merge sort)
+        # merge the two y-sorted halves (like merge sort)
         merged = []
         i = j = 0
         while i < len(ys_left) and j < len(ys_right):
@@ -83,7 +77,7 @@ def closest_pair(points, record_steps=False):
         merged.extend(ys_left[i:])
         merged.extend(ys_right[j:])
 
-        # Combine: strip of points within d of the middle line, in y order
+        # combine: strip of points within d of the middle line, in y order
         d = math.sqrt(best)
         strip = [p for p in merged if abs(p[0] - mid_x) < d]
         for a in range(len(strip)):

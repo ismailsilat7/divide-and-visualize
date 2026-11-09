@@ -1,7 +1,6 @@
-"""
-Runs closest pair on cp01-cp10 and Karatsuba on im01-im10.
-Checks each result, prints a table and saves it to runner/results.csv.
-"""
+# Runs closest pair on cp01-cp10 and Karatsuba on im01-im10.
+# Checks each result, prints a table and saves it to runner/results.csv.
+
 import csv
 import math
 import os
@@ -14,8 +13,8 @@ from algorithms.closest_pair import closest_pair
 from algorithms.karatsuba import multiply
 
 DATA = os.path.join(ROOT, "data")
-BRUTE_LIMIT = 5000                                   # brute force check only up to this n
-KNOWN_DIST = {"cp06": 0.0, "cp08": 1.0, "cp09": 1e-4}  # answers known from how files are built
+BRUTE_LIMIT = 5000                                      # brute force check only up to this n
+KNOWN_DIST = {"cp06": 0.0, "cp08": 1.0, "cp09": 1e-4}   # answers known from how files are built
 
 
 def find(name):
@@ -37,8 +36,8 @@ def brute_force(points):
                for i in range(len(points)) for j in range(i + 1, len(points)))
 
 
+# True if no two points are closer than d. Independent grid check, about O(n)
 def no_closer_pair(points, d):
-    """True if no two points are closer than d. Independent grid check, about O(n)."""
     grid = {}
     for p in points:
         grid.setdefault((int(p[0] // d), int(p[1] // d)), []).append(p)

@@ -1,8 +1,7 @@
-"""
-Karatsuba multiplication, divide and conquer, about O(n^1.585).
-Below THRESHOLD digits it switches to ordinary multiplication.
-Optional step recording so the GUI can replay the algorithm on small inputs.
-"""
+# Karatsuba multiplication, divide and conquer, about O(n^1.585)
+# Below THRESHOLD digits it switches to ordinary multiplication
+# we have done step recording so the GUI can replay the algorithm on small inputs
+
 import sys
 from functools import lru_cache
 
@@ -17,8 +16,8 @@ def pow10(k):
     return 10 ** k
 
 
+# x and y have at most n digits each. steps is a list or None.
 def karatsuba(x, y, n, steps, depth, threshold=THRESHOLD):
-    """x and y have at most n digits each. steps is a list or None."""
     if x == 0 or y == 0:
         return 0
     if n <= threshold:                  # base case: ordinary multiplication
@@ -34,8 +33,7 @@ def karatsuba(x, y, n, steps, depth, threshold=THRESHOLD):
     c, d = divmod(y, p)                 # y = c * 10^m + d
     hi = n - m                          # max digits of the high parts
     if steps is not None:
-        steps.append({"type": "split", "depth": depth, "x": x, "y": y, "m": m,
-                      "a": a, "b": b, "c": c, "d": d})
+        steps.append({"type": "split", "depth": depth, "x": x, "y": y, "m": m, "a": a, "b": b, "c": c, "d": d})
 
     ac = karatsuba(a, c, hi, steps, depth + 1, threshold)
     bd = karatsuba(b, d, m, steps, depth + 1, threshold)
@@ -44,13 +42,12 @@ def karatsuba(x, y, n, steps, depth, threshold=THRESHOLD):
     result = ac * pow10(2 * m) + mid * p + bd               # shifts by powers of 10
 
     if steps is not None:
-        steps.append({"type": "combine", "depth": depth, "ac": ac, "bd": bd,
-                      "z": z, "mid": mid, "result": result})
+        steps.append({"type": "combine", "depth": depth, "ac": ac, "bd": bd, "z": z, "mid": mid, "result": result})
     return result
 
 
+# x, y: non-negative ints. Returns (product, steps)
 def multiply(x, y, record_steps=False, threshold=THRESHOLD):
-    """x, y: non-negative ints. Returns (product, steps)."""
     steps = [] if record_steps else None
     n = max(len(str(x)), len(str(y)))
     product = karatsuba(x, y, n, steps, 0, threshold)
