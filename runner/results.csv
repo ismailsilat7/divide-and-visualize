@@ -1,21 +1,21 @@
 file,algorithm,size,result,time_s,correct,checked_with
-cp01,closest pair,1000,"d=1140.971332 pair=(916913.714473, 691780.520896),(917651.213694, 692651.101438)",0.00,True,brute force
-cp02,closest pair,10000,"d=133.322920 pair=(669390.994606, 838988.530225),(669311.662275, 839095.681437)",0.02,True,grid check
-cp03,closest pair,100000,"d=5.638053 pair=(119609.001562, 223191.670401),(119614.5412, 223192.719235)",0.40,True,grid check
-cp04,closest pair,1000000,"d=1.013613 pair=(783541.45412, 212498.300196),(783541.516054, 212499.311915)",5.57,True,grid check
-cp05,closest pair,1000000,"d=0.081822 pair=(394318.453679, 133496.239003),(394318.409816, 133496.308074)",5.24,True,grid check
-cp06,closest pair,1000000,"d=0.000000 pair=(0.0, 0.0),(0.0, 0.0)",4.80,True,known answer
-cp07,closest pair,100000,"d=0.000018 pair=(500000.0, 233843.505407),(500000.0, 233843.505425)",0.31,True,grid check
-cp08,closest pair,100000,"d=1.000000 pair=(0.0, 0.0),(0.0, 1.0)",0.21,True,known answer
-cp09,closest pair,1000000,"d=0.000100 pair=(499999.99995, 123456.0),(500000.00005, 123456.0)",5.41,True,known answer
+cp01,closest pair,1000,"d=1140.971332 pair=(916913.714473, 691780.520896),(917651.213694, 692651.101438)",0.01,True,brute force
+cp02,closest pair,10000,"d=133.322920 pair=(669390.994606, 838988.530225),(669311.662275, 839095.681437)",0.07,True,grid check
+cp03,closest pair,100000,"d=5.638053 pair=(119609.001562, 223191.670401),(119614.5412, 223192.719235)",1.40,True,grid check
+cp04,closest pair,1000000,"d=1.013613 pair=(783541.45412, 212498.300196),(783541.516054, 212499.311915)",32.94,True,grid check
+cp05,closest pair,1000000,"d=0.081822 pair=(394318.453679, 133496.239003),(394318.409816, 133496.308074)",17.62,True,grid check
+cp06,closest pair,1000000,"d=0.000000 pair=(0.0, 0.0),(0.0, 0.0)",16.06,True,known answer
+cp07,closest pair,100000,"d=0.000018 pair=(500000.0, 233843.505407),(500000.0, 233843.505425)",1.21,True,grid check
+cp08,closest pair,100000,"d=1.000000 pair=(0.0, 0.0),(0.0, 1.0)",0.73,True,known answer
+cp09,closest pair,1000000,"d=0.000100 pair=(499999.99995, 123456.0),(500000.00005, 123456.0)",18.05,True,known answer
 cp10,closest pair,101,"d=9291.896321 pair=(304593.644976, 826700.421275),(312910.043675, 822555.924934)",0.00,True,brute force
 im01,karatsuba,1000 x 1000 digits,"2000 digits, starts 3087250397, ends 4824561262",0.00,True,verified vs built-in
-im02,karatsuba,10000 x 10000 digits,"19999 digits, starts 2270646372, ends 8096478480",0.01,True,verified vs built-in
-im03,karatsuba,100000 x 100000 digits,"200000 digits, starts 4916288298, ends 8751915199",0.36,True,verified vs built-in
-im04,karatsuba,1000000 x 1000000 digits,"2000000 digits, starts 4289710351, ends 1577531123",16.13,True,verified vs built-in
-im05,karatsuba,1000000 x 10 digits,"1000009 digits, starts 8349484066, ends 0091209150",1.18,True,verified vs built-in
-im06,karatsuba,100000 x 100000 digits,"200000 digits, starts 9880321911, ends 0654923200",0.35,True,verified vs built-in
-im07,karatsuba,99999 x 99999 digits,"199998 digits, starts 1500000049, ends 0000000000",0.36,True,verified vs built-in
-im08,karatsuba,1000000 x 1000000 digits,"1999999 digits, starts 1000000000, ends 0000000000",2.36,True,verified vs built-in
-im09,karatsuba,1 x 1000000 digits,"1 digits, starts 0, ends 0",0.15,True,verified vs built-in
+im02,karatsuba,10000 x 10000 digits,"19999 digits, starts 2270646372, ends 8096478480",0.02,True,verified vs built-in
+im03,karatsuba,100000 x 100000 digits,"200000 digits, starts 4916288298, ends 8751915199",0.75,True,verified vs built-in
+im04,karatsuba,1000000 x 1000000 digits,"2000000 digits, starts 4289710351, ends 1577531123",32.06,True,verified vs built-in
+im05,karatsuba,1000000 x 10 digits,"1000009 digits, starts 8349484066, ends 0091209150",2.60,True,verified vs built-in
+im06,karatsuba,100000 x 100000 digits,"200000 digits, starts 9880321911, ends 0654923200",0.70,True,verified vs built-in
+im07,karatsuba,99999 x 99999 digits,"199998 digits, starts 1500000049, ends 0000000000",0.73,True,verified vs built-in
+im08,karatsuba,1000000 x 1000000 digits,"1999999 digits, starts 1000000000, ends 0000000000",5.26,True,verified vs built-in
+im09,karatsuba,1 x 1000000 digits,"1 digits, starts 0, ends 0",0.62,True,verified vs built-in
 im10,karatsuba,101 x 101 digits,"201 digits, starts 4040072616, ends 7271646712",0.00,True,verified vs built-in
