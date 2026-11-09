@@ -63,6 +63,7 @@
               </div>
             </div>
           </div>
+          <div class="info-panel" id="infoPanel"></div>
           <div class="zoombar" id="zoomBar">
             <span>Tree zoom</span
             ><button class="zoombtn" id="zoomOut" aria-label="Zoom out">
@@ -268,6 +269,8 @@
         $("#zoomBar").classList.remove("active");
         $("#stage").classList.remove("tree-stage");
         $("#stage").classList.add("result-stage");
+        const panel = $("#infoPanel");
+        if (panel) panel.classList.remove("active");
         const r = data.result;
         const inputDigits = r.input_digits ?? current.size;
         let visual = "",
@@ -300,10 +303,10 @@
             marks += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="2.1" fill="#8b9093" opacity=".58"/>`;
           marks += `<line x1="${X(x1)}" y1="${Y(y1)}" x2="${X(x2)}" y2="${Y(y2)}" stroke="#4aa876" stroke-width="3"/><circle cx="${X(x1)}" cy="${Y(y1)}" r="5" fill="#e8896a" stroke="#202224" stroke-width="2"/><circle cx="${X(x2)}" cy="${Y(y2)}" r="5" fill="#e8896a" stroke="#202224" stroke-width="2"/>`;
           visual = `<div class="static-visual"><div class="static-visual-head"><span>${hasCloud ? "Closest-pair overview" : "Closest-pair detail"}</span><span>${hasCloud ? `Sample of ${current.size.toLocaleString()} points · closest edge highlighted` : "Restart the server to load the full point-cloud sample"}</span></div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Sampled point cloud with closest pair highlighted">${marks}<text class="axis-label" x="${pad}" y="${H - 5}">x coordinate</text><text class="axis-label" x="8" y="${pad}">y</text></svg></div>`;
-          cards = `<div class="result-grid"><div class="metric"><label>Closest distance</label><strong>${Number(r.distance).toPrecision(10)}</strong></div><div class="metric"><label>Dataset</label><strong>${esc(current.size_label)}</strong></div><div class="metric"><label>Runtime</label><strong>${data.elapsed.toFixed(3)} s</strong></div><div class="metric wide"><label>Closest pair</label><strong class="mono">(${x1}, ${y1}) &nbsp;↔&nbsp; (${x2}, ${y2})</strong></div><div class="metric wide"><label>Verification</label><strong>${esc(data.verification)}</strong></div></div>`;
+          cards = `<div class="result-grid"><div class="metric"><label>Closest distance</label><strong>${Number(r.distance).toPrecision(10)}</strong></div><div class="metric"><label>Dataset</label><strong>${esc(current.size_label)}</strong></div><div class="metric"><label>Runtime</label><strong>${data.elapsed.toFixed(3)} s</strong></div><div class="metric wide"><label>Closest pair</label><strong class="mono">(${x1}, ${y1}) &nbsp;↔&nbsp; (${x2}, ${y2})</strong></div><div class="metric wide"><label>Verification</label><strong class="${data.verification.includes("passed") ? "verify-pass" : "verify-fail"}">${esc(data.verification)}</strong></div></div>`;
         } else {
           visual = `<div class="static-visual"><div class="static-visual-head"><span>Karatsuba overview</span><span>${inputDigits.toLocaleString()}-digit operands · threshold ${data.threshold}</span></div><svg viewBox="0 0 800 220" role="img" aria-label="Karatsuba split, three recursive products, and recombination"><path class="node-edge" d="M400 58 V86 M400 86 H145 V113 M400 86 V113 M400 86 H655 V113 M145 157 V177 H400 M400 157 V177 M655 157 V177 H400"/><rect class="node-box node-main" x="310" y="18" width="180" height="42" rx="10"/><text class="node-title" text-anchor="middle" x="400" y="36">Split x and y</text><text class="node-sub" text-anchor="middle" x="400" y="51">x = a·10ᵐ + b · y = c·10ᵐ + d</text><rect class="node-box" x="70" y="112" width="150" height="45" rx="9"/><text class="node-title" text-anchor="middle" x="145" y="132">ac</text><text class="node-sub" text-anchor="middle" x="145" y="147">high × high</text><rect class="node-box" x="325" y="112" width="150" height="45" rx="9"/><text class="node-title" text-anchor="middle" x="400" y="132">bd</text><text class="node-sub" text-anchor="middle" x="400" y="147">low × low</text><rect class="node-box" x="580" y="112" width="150" height="45" rx="9"/><text class="node-title" text-anchor="middle" x="655" y="132">(a+b)(c+d)</text><text class="node-sub" text-anchor="middle" x="655" y="147">third recursive product</text><rect class="node-box node-result" x="150" y="178" width="500" height="32" rx="9"/><text class="node-title" text-anchor="middle" x="400" y="199">ac·10²ᵐ + ((a+b)(c+d) − ac − bd)·10ᵐ + bd</text></svg></div>`;
-          cards = `<div class="result-grid"><div class="metric"><label>Product digits</label><strong>${r.digits.toLocaleString()}</strong></div><div class="metric"><label>Runtime</label><strong>${data.elapsed.toFixed(3)} s</strong></div><div class="metric"><label>Base threshold</label><strong>${data.threshold} digits</strong></div><div class="metric wide"><label>Product · first 32 digits</label><strong class="mono">${esc(r.prefix)}</strong></div><div class="metric wide"><label>Product · last 32 digits</label><strong class="mono">${esc(r.suffix)}</strong></div><div class="metric wide"><label>Verification</label><strong>${esc(data.verification)}</strong></div></div>`;
+          cards = `<div class="result-grid"><div class="metric"><label>Product digits</label><strong>${r.digits.toLocaleString()}</strong></div><div class="metric"><label>Runtime</label><strong>${data.elapsed.toFixed(3)} s</strong></div><div class="metric"><label>Base threshold</label><strong>${data.threshold} digits</strong></div><div class="metric wide"><label>Product · first 32 digits</label><strong class="mono">${esc(r.prefix)}</strong></div><div class="metric wide"><label>Product · last 32 digits</label><strong class="mono">${esc(r.suffix)}</strong></div><div class="metric wide"><label>Verification</label><strong class="${data.verification.includes("passed") ? "verify-pass" : "verify-fail"}">${esc(data.verification)}</strong></div></div>`;
         }
         $("#stage").innerHTML = `${visual}${cards}`;
         $("#scrubber").disabled = true;
@@ -318,67 +321,132 @@
         index = i;
         const step = data.steps[i] || {};
         const points = data.points,
-          W = 900,
-          H = 380,
-          pad = 38,
+          W = 900, H = 380, pad = 38,
           xs = points.map((p) => p[0]),
           ys = points.map((p) => p[1]),
-          minX = Math.min(...xs),
-          maxX = Math.max(...xs),
-          minY = Math.min(...ys),
-          maxY = Math.max(...ys);
-        const X = (x) =>
-            pad + ((x - minX) / (maxX - minX || 1)) * (W - 2 * pad),
-          Y = (y) =>
-            H - pad - ((y - minY) / (maxY - minY || 1)) * (H - 2 * pad);
-        const active = new Set();
-        if (step.strip) step.strip.forEach((p) => active.add(p.join(",")));
-        if (step.pair)
-          (step.pair || []).forEach((p) => active.add(p.join(",")));
+          minX = Math.min(...xs), maxX = Math.max(...xs),
+          minY = Math.min(...ys), maxY = Math.max(...ys);
+        const X = (x) => pad + ((x - minX) / (maxX - minX || 1)) * (W - 2 * pad),
+          Y = (y) => H - pad - ((y - minY) / (maxY - minY || 1)) * (H - 2 * pad);
+
+        // Build point-role sets for coloring
+        const stripSet = new Set();
+        if (step.strip) step.strip.forEach((p) => stripSet.add(p.join(",")));
+        const pairSet = new Set();
+        if (step.pair && step.pair[0] && step.pair[1]) {
+          pairSet.add(step.pair[0].join(","));
+          pairSet.add(step.pair[1].join(","));
+        }
+
+        // Count strip comparisons up to this frame
+        const comparisons = data.steps.slice(0, i + 1).filter((s) => s.type === "check").length;
+
+        // Track running best pair from base/combine steps seen so far
+        let bestPairSoFar = null, bestDistSoFar = Infinity;
+        for (let k = 0; k <= i; k++) {
+          const s = data.steps[k];
+          if ((s.type === "base" || s.type === "combine" || s.type === "final") &&
+            s.dist !== undefined && s.pair && s.pair[0] && s.pair[1] && s.dist < bestDistSoFar) {
+            bestDistSoFar = s.dist;
+            bestPairSoFar = s.pair;
+          }
+        }
+
         let markup = "";
+
+        // Grid lines
         for (let k = 0; k <= 4; k++) {
           const gy = pad + ((H - 2 * pad) * k) / 4;
           markup += `<line class="svg-grid" x1="${pad}" y1="${gy}" x2="${W - pad}" y2="${gy}"/>`;
         }
+
+        // Left/right half shading + divider line + strip band
         if (step.mid_x !== undefined) {
           const line = X(step.mid_x);
+          // Subproblem half shading
+          markup += `<rect x="${pad}" y="${pad}" width="${Math.max(0, line - pad)}" height="${H - 2 * pad}" fill="#3a7ca5" opacity=".06"/>`;
+          markup += `<rect x="${line}" y="${pad}" width="${Math.max(0, W - pad - line)}" height="${H - 2 * pad}" fill="#a8692f" opacity=".06"/>`;
+          // Divider line
           markup += `<line x1="${line}" y1="${pad}" x2="${line}" y2="${H - pad}" stroke="#e8896a" stroke-width="1.5" stroke-dasharray="5 5" opacity=".9"/>`;
+          // Strip band + δ label
           if (step.dist && step.type === "combine") {
             const d = (step.dist / (maxX - minX || 1)) * (W - 2 * pad);
             markup += `<rect x="${line - d}" y="${pad}" width="${2 * d}" height="${H - 2 * pad}" fill="#a8692f" opacity=".13"/>`;
+            markup += `<text x="${line + 6}" y="${pad + 17}" fill="#e8896a" font-size="12" font-weight="600" opacity=".9">δ = ${Number(step.dist).toPrecision(4)}</text>`;
           }
         }
-        const pair =
-          step.pair || (step.type === "combine" && step.pair) || null;
-        if (pair && pair[0] && pair[1])
-          markup += `<line x1="${X(pair[0][0])}" y1="${Y(pair[0][1])}" x2="${X(pair[1][0])}" y2="${Y(pair[1][1])}" stroke="${step.type === "combine" || i === data.steps.length - 1 ? "#4aa876" : "#e8896a"}" stroke-width="3"/>`;
-        points.forEach((p) => {
-          const inFrame = !step.lo || true;
-          const col = active.has(p.join(",")) ? "#e8896a" : "#8b9093",
-            op = active.has(p.join(",")) ? 1 : 0.62;
-          markup += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="${active.has(p.join(",")) ? (step.type === "final" ? 6 : 4) : 2.6}" fill="${col}" opacity="${op}"/>`;
-        });
-        if (step.type === "final") {
-          const a = step.pair[0],
-            b = step.pair[1];
-          markup += `<text x="${(X(a[0]) + X(b[0])) / 2 + 12}" y="${(Y(a[1]) + Y(b[1])) / 2 - 12}" fill="#4aa876" font-size="14" font-weight="600">d = ${Number(step.dist).toPrecision(6)}</text>`;
+
+        // Persistent best-pair-so-far line (faint green dashed), hidden on final frame
+        if (bestPairSoFar && bestPairSoFar[0] && bestPairSoFar[1] && step.type !== "final") {
+          const [ba, bb] = bestPairSoFar;
+          markup += `<line x1="${X(ba[0])}" y1="${Y(ba[1])}" x2="${X(bb[0])}" y2="${Y(bb[1])}" stroke="#4aa876" stroke-width="1.5" stroke-dasharray="4 3" opacity=".4"/>`;
         }
+
+        // All points — three tiers: pair (coral), strip (amber), rest (grey)
+        points.forEach((p) => {
+          const key = p.join(",");
+          const isPair  = pairSet.has(key);
+          const isStrip = stripSet.has(key);
+          const col = isPair ? "#e8896a" : isStrip ? "#c8893a" : "#8b9093";
+          const op  = isPair ? 1          : isStrip ? 0.85       : 0.4;
+          const r   = isPair ? (step.type === "final" ? 6 : 5) : isStrip ? 3.2 : 2.3;
+          markup += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="${r}" fill="${col}" opacity="${op}"/>`;
+        });
+
+        // Current pair edge + coordinate labels + distance label
+        const pair = step.pair || null;
+        if (pair && pair[0] && pair[1]) {
+          const isFinal = step.type === "final" || i === data.steps.length - 1;
+          const isCheck = step.type === "check";
+          const edgeCol = (step.type === "combine" || isFinal) ? "#4aa876" : "#e8896a";
+          const dash    = isCheck ? 'stroke-dasharray="6 3"' : "";
+          markup += `<line x1="${X(pair[0][0])}" y1="${Y(pair[0][1])}" x2="${X(pair[1][0])}" y2="${Y(pair[1][1])}" stroke="${edgeCol}" stroke-width="${isFinal ? 3 : 2}" ${dash}/>`;
+
+          // Distance near midpoint of edge
+          if (step.dist !== undefined) {
+            const mx = (X(pair[0][0]) + X(pair[1][0])) / 2;
+            const my = (Y(pair[0][1]) + Y(pair[1][1])) / 2;
+            if (isFinal) {
+              markup += `<text x="${mx + 12}" y="${my - 14}" fill="#4aa876" font-size="14" font-weight="600">d = ${Number(step.dist).toPrecision(6)}</text>`;
+            } else {
+              markup += `<text x="${mx + 7}" y="${my - 7}" fill="${edgeCol}" font-size="11" font-weight="600">d=${Number(step.dist).toPrecision(4)}</text>`;
+            }
+          }
+
+
+        }
+
         $("#stage").innerHTML =
           `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Closest pair point cloud">${markup}<text class="axis-label" x="${pad}" y="${H - 10}">x coordinate</text><text class="axis-label" x="12" y="${pad - 10}">y</text></svg>`;
-        let labels = {
-          divide: "Divide at the middle x-coordinate",
-          strip: "Build the candidate strip",
-          check: "Compare two candidates",
-          base: "Solve a small group directly",
+
+        // Status text
+        const labels = {
+          divide:  "Divide at the middle x-coordinate",
+          strip:   "Build the candidate strip",
+          check:   "Compare two candidates in the strip",
+          base:    "Solve a small group directly",
           combine: "Combine halves and update the best pair",
-          final: "Closest pair found",
+          final:   "Closest pair found",
         };
-        $("#status").textContent =
-          step.type === "check"
-            ? "Checking a pair in the strip"
-            : labels[step.type] || "Algorithm complete";
-        $("#description").textContent =
-          `Frame ${i + 1}: ${step.type || "final"} · ${current.size_label}`;
+        $("#status").textContent = labels[step.type] || "Algorithm complete";
+        $("#description").textContent = `Frame ${i + 1}: ${step.type || "final"} · ${current.size_label}`;
+
+        // Info panel
+        const phaseNames = { divide: "Divide", base: "Base case (brute)", check: "Strip compare", combine: "Combine", final: "Complete" };
+        let infoHtml = `
+          <div class="info-row"><span class="info-label">Phase</span><span class="info-val">${phaseNames[step.type] || "—"}</span></div>
+          <div class="info-row"><span class="info-label">Subproblem pts</span><span class="info-val">${step.lo ?? "—"} → ${step.hi ?? "—"}</span></div>
+          <div class="info-row"><span class="info-label">Best δ so far</span><span class="info-val">${bestDistSoFar < Infinity ? Number(bestDistSoFar).toPrecision(5) : "—"}</span></div>
+          <div class="info-row"><span class="info-label">Strip size</span><span class="info-val">${step.strip ? step.strip.length + " pts" : "—"}</span></div>
+          <div class="info-row"><span class="info-label">Strip checks</span><span class="info-val">${comparisons}</span></div>
+          <div class="info-row"><span class="info-label">Total frames</span><span class="info-val">${data.steps.length}</span></div>`;
+        if (pair && pair[0] && pair[1]) {
+          const [p0, p1] = pair;
+          infoHtml += `<div class="info-row wide"><span class="info-label">Comparing</span><span class="info-val mono">(${p0[0].toFixed(3)}, ${p0[1].toFixed(3)}) &nbsp;↔&nbsp; (${p1[0].toFixed(3)}, ${p1[1].toFixed(3)})</span></div>`;
+        }
+        const panel = $("#infoPanel");
+        if (panel) { panel.innerHTML = infoHtml; panel.classList.add("active"); }
+
         syncControls();
       }
       function prepareTree() {
@@ -540,6 +608,8 @@
         $("#status").textContent = labels[e.type] || "Karatsuba recursion";
         $("#description").textContent =
           `Frame ${i + 1}: ${e.type || "final"} · ${current.size_label}`;
+        const panel = $("#infoPanel");
+        if (panel) panel.classList.remove("active");
         syncControls();
       }
       function syncControls() {
@@ -642,6 +712,14 @@
           ),
           true,
         );
+      document.addEventListener("keydown", (e) => {
+        // ignore when focus is on a slider/input
+        if (e.target.tagName === "INPUT") return;
+        if (e.key === "ArrowLeft")  { e.preventDefault(); pause(); go(index - 1); }
+        if (e.key === "ArrowRight") { e.preventDefault(); pause(); go(index + 1); }
+        if (e.key === " ")          { e.preventDefault(); toggle(); }
+        if (e.key === "r" || e.key === "R") { e.preventDefault(); pause(); go(0); }
+      });
       init();
     </script>
   </body>

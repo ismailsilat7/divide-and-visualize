@@ -518,6 +518,47 @@
         stroke: #ffffff0b;
         stroke-width: 1;
       }
+      /* ── Info panel (closest-pair live stats) ─────────────────────────── */
+      .info-panel {
+        display: none;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px 14px;
+        margin-top: 10px;
+        padding: 12px 14px;
+        background: #252729;
+        border: 1px solid #3b3d40;
+        border-radius: 11px;
+        font-size: 13px;
+      }
+      .info-panel.active {
+        display: grid;
+      }
+      .info-row {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .info-row.wide {
+        grid-column: 1 / -1;
+      }
+      .info-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #85898c;
+      }
+      .info-val {
+        font-size: 14px;
+        font-weight: 570;
+        color: #e0e2e3;
+      }
+      .info-val.mono {
+        font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+        color: #c8cecb;
+      }
+      /* ── Verification badge colours ───────────────────────────────────── */
+      .verify-pass { color: #4aa876; }
+      .verify-fail { color: #e8896a; }
       @media (max-width: 900px) {
         .app {
           grid-template-columns: 210px minmax(0, 1fr);
