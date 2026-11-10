@@ -2,6 +2,12 @@
 
 A CS2009 Design and Analysis of Algorithms project demonstrating the 2D closest-pair divide-and-conquer algorithm and Karatsuba integer multiplication. It includes seeded dataset generation, a benchmark runner, and a local interactive visualizer.
 
+## Group members
+
+- 24K-0802 Ali Kashif
+- 24K-0546 Ismail Silat
+- 24K-0581 Hammad Abdul Rahim
+
 ## Setup and data generation
 
 Developed and tested with Python 3.10.

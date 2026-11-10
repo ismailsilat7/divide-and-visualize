@@ -29,7 +29,7 @@ def make_rng(name, number):
 # save text to data/<name>.txt, moving it to data/large/ if over 1 MB
 def write_file(name, text):
     path = os.path.join(DATA_DIR, name + ".txt")
-    with open(path, "w") as f:
+    with open(path, "w", newline="\n") as f:
         f.write(text)
     if os.path.getsize(path) > ONE_MB:
         shutil.move(path, os.path.join(LARGE_DIR, name + ".txt"))
@@ -153,7 +153,7 @@ def main():
     rng = make_rng("im10", 110)   # small demo file
     write_numbers("im10", random_number(rng, 101), random_number(rng, 101))
 
-    with open(os.path.join(DATA_DIR, "seeds.txt"), "w") as f:
+    with open(os.path.join(DATA_DIR, "seeds.txt"), "w", newline="\n") as f:
         for name, seed in sorted(seeds_used.items()):
             f.write(f"{name}: {seed}\n")
     print("done")
